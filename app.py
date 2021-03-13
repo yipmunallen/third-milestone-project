@@ -18,10 +18,9 @@ mongo = PyMongo(app)
 
 
 @app.route("/")
-@app.route("/get_stocks")
-def get_stocks():
-    stocks = mongo.db.stocks.find()
-    return render_template("stocks.html", stocks=stocks)
+@app.route("/get_index")
+def get_index():
+    return render_template("index.html")
 
 
 if __name__ == "__main__":
