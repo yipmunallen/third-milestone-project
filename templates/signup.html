@@ -20,7 +20,7 @@
                                         {% endfor %}
                                     {% endif %}
                                 {% endwith %}
-                            <form method="POST" action="{{ url_for('get_signup') }}">
+                            <form method="POST" action="{{ url_for('signup') }}">
                                 <div class="mb-3">
                                   <label for="username" class="form-label">Username</label>
                                   <input type="text" class="form-control" id="username" name="username" minlength="5"
@@ -43,6 +43,11 @@
                                     </div>
                                 </div>
                             </form>
+                            <div class="form-row text-center">
+                                <div class="col-12 form-redirect">
+                                    <p>Already have an account? Log in <a href="{{ url_for('login') }}">here</a></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
