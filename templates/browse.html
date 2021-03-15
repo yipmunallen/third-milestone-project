@@ -2,20 +2,45 @@
 {% block content %}
 
     <section id="browse-main" class="main-content">
-        <div class="browse-items col-6 mx-auto">
+        <div class="browse-items col-9 col-md-6 mx-auto">
             {% for stock in stocks %}
                 <a href="#" class="list-group-item list-group-item-action">
-                  <div class="d-flex w-100">
-                    <h3 class="mb-1">{{ stock.ticker_symbol }}</h3> <h5>&nbsp;&nbsp;{{ stock.market_name }}</h5>
-                  </div>
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ stock.company_name }}</h5>
-                    <i class="fas fa-angle-right"></i>
-                  </div>
-                  <p class="text-muted">{{ stock.sector }}</p>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col align-self-center justify-text-center stock-icon">
+                                <div class="icon-border" >
+                                    <img src= "{{stock.icon_url}}" id="stock-image" alt="icon">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="d-flex">
+                                        <h3 class="mb-1">{{ stock.ticker_symbol }}</h3><h5>&nbsp;&nbsp;{{ stock.market_name }}</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ stock.company_name }}</h5>
+                                        <i class="fas fa-angle-right"></i> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="d-flex">
+                                        <p class="text-muted">{{ stock.sector }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </a>
             {% endfor %}
         </div>    
     </section>    
     
 {% endblock %}
+
+
+                                         
+
+
+
