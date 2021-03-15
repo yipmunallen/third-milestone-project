@@ -16,6 +16,10 @@ body{
     color: #011663;
 }
 
+.main-content{
+    margin-top: 8rem;
+}
+
 /* Nav Bar */
 
 .navbar-brand {
@@ -79,13 +83,18 @@ body{
     margin-top: 1.5rem;
 }
 
-/* Forms */
+/* Watchlist */
 
 .watchlist-intro{
-    margin-top: 8rem;
     text-align: center;
 }
 
 .watchlist-items{
+    margin-top: 3rem;
+}
+
+/* Browse */
+
+.browse-items{
     margin-top: 3rem;
 }
