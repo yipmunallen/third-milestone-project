@@ -36,7 +36,7 @@
                   <a class="nav-link" href="{{ url_for('watchlist', username=session['user']) }}">Watchlist</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Browse</a>
+                  <a class="nav-link" href="{{ url_for('browse') }}">Browse</a>
                 </li>
               </ul>
               <form class="d-flex">
@@ -48,10 +48,10 @@
         </nav>
     </header>
 
-    <section class="content">
-        {% block content %}
-        {% endblock %}
-    </section>
+
+    {% block content %}
+    {% endblock %}
+
 
     <!--Scripts-->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
