@@ -87,7 +87,7 @@ def watchlist(username):
 
 @app.route("/browse")
 def browse():
-    stocks = list(mongo.db.stocks.find())
+    stocks = mongo.db.stocks.find().sort("ticker_symbol")
     return render_template("browse.html", stocks=stocks)
 
 
