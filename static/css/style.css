@@ -98,3 +98,18 @@ body{
 .browse-items{
     margin-top: 3rem;
 }
+
+#stock-icon {
+    -ms-flex: 0 0 20px;
+    flex: 0 0 20px;
+} 
+
+#stock-icon-border{
+    height: 4rem;
+    width: 4rem;
+}
+
+#stock-icon-image{
+    width: 100%;
+    height: 100%
+}
