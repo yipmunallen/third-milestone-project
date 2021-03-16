@@ -1,42 +1,130 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <section id="browse-main" class="main-content">
-        <div class="browse-items col-9 col-md-6 mx-auto">
-            {% for stock in stocks %}
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="container-fluid">
+<div class="container main-content">
+    <div class="row">
+        <div class="col-lg-12 card-margin">
+            <div class="card search-form">
+                <div class="card-body p-0">
+                    <form id="search-form">
                         <div class="row">
-                            <div class="col align-self-center justify-text-center" id="stock-icon">
-                                <div id="stock-icon-border" >
-                                    <img src= "{{stock.icon_url}}" id="stock-icon-image" alt="icon">
+                            <div class="col-12">
+                                <div class="row no-gutters">
+                                    <div class="col-10 p-0">
+                                        <input type="text" placeholder="Search..." class="form-control" id="search" name="search">
+                                    </div>
+                                    <div class="col-2 p-0">
+                                        <button type="submit" class="btn">
+                                            <i class="fa fa-search fa-2x"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="d-flex">
-                                        <h3 class="mb-1">{{ stock.ticker_symbol }}</h3><h5>&nbsp;&nbsp;{{ stock.market_name }}</h5>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-margin">
+                <div class="card-body">
+                    <div class="row search-body">
+                        <div class="col-lg-12">
+                            <div class="search-result">
+                                <div class="browse-header">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="records">Showing: <b>1-20</b> of <b>200</b> result</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="result-actions">
+                                                <div class="result-sorting">
+                                                    <span>Sort By:</span>
+                                                    <select class="form-control border-0" id="exampleOption">
+                                                        <option value="1">Relevance</option>
+                                                        <option value="2">Names (A-Z)</option>
+                                                        <option value="3">Names (Z-A)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">{{ stock.company_name }}</h5>
-                                        <i class="fas fa-angle-right"></i> 
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="d-flex">
-                                        <p class="text-muted">{{ stock.sector }}</p>
+                                <div class="browse-body">
+                                    <div class="table-responsive table-hover">
+                                        <table class="table browse-content">
+                                            {% for stock in stocks %}
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="stock-icon">
+                                                                <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                    <img src= "{{stock.icon_url}}" alt="icon">
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-name">
+                                                                <a href="{{ url_for('get_stock', stock_id=task._id) }}">
+                                                                    <h2>{{ stock.ticker_symbol }}</h2>
+                                                                    <h4>{{ stock.company_name }}</h4>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-market-name">
+                                                                <h5>{{ stock.market_name }}</h5>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-sector">
+                                                                <h5>{{ stock.sector }}</h5>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-favourite">
+                                                                <a href="#">
+                                                                    <i class="far fa-star fa-2x"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            {% endfor %}
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </a>
-            {% endfor %}
-        </div>    
-    </section>    
-    
+                    <nav class="d-flex justify-content-center">
+                        <ul class="pagination pagination-base pagination-boxed pagination-square mb-0">
+                            <li class="page-item">
+                                <a class="page-link no-border" href="#">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link no-border" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">4</a></li>
+                            <li class="page-item">
+                                <a class="page-link no-border" href="#">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
 {% endblock %}
 
 

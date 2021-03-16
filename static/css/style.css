@@ -17,7 +17,12 @@ body{
 }
 
 .main-content{
-    margin-top: 8rem;
+    margin-top: 10rem;
+}
+
+a {
+    color: inherit;
+    text-decoration: none !important; /* no underline */
 }
 
 /* Nav Bar */
@@ -95,21 +100,120 @@ body{
 
 /* Browse */
 
-.browse-items{
-    margin-top: 3rem;
+.card-margin {
+    margin-bottom: 2rem;
 }
 
-#stock-icon {
-    -ms-flex: 0 0 20px;
-    flex: 0 0 20px;
-} 
-
-#stock-icon-border{
-    height: 4rem;
-    width: 4rem;
+@media (min-width: 768px) {
+    .card-margin {
+        margin-bottom: 5rem;
+    }
 }
 
-#stock-icon-image{
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    border: 1px solid #e6e4e9;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -ms-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+}
+
+.browse-content tr:first-child td {
+    border: 0;
+}
+
+.browse-content .stock-icon img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+}
+
+.browse-content .stock-name {
+    min-width: 20rem;
+}
+
+.browse-content .stock-market-name {
+    min-width: 10rem;
+}
+
+.browse-content .stock-favourite .far {
+    margin-top: 1rem;
+    color: #fd8b2c;
+}
+
+.browse-content .stock-favourite svg.starred {
+    fill: #fd8b2c;
+}
+
+.search-form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.search-form input {
+    height: 100%;
+    border: 0;
+    display: block;
     width: 100%;
-    height: 100%
+    padding: 1rem;
+    height: 100%;
+    font-size: 1.5rem;
 }
+
+.search-form button {
+    height: 100%;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.search-body {
+    margin-bottom: 1.5rem;
+}
+
+.search-body .search-result .browse-header {
+    margin-bottom: 2rem;
+}
+
+.search-body .search-result .browse-header .records {
+    color: #3c4142;
+}
+
+.search-body .search-result .browse-header .result-actions {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-body .search-result .browse-header .result-actions .result-sorting {
+  display: flex;
+  align-items: center;
+}
+
+.search-body .search-result .browse-header .result-actions .result-sorting span {
+  flex-shrink: 0;
+}
+
+.search-body .search-result .browse-header .result-actions .result-sorting select {
+  color: #68CBD7;
+}
+
+.search-body .search-result .browse-header .result-actions .result-sorting select option {
+  color: #3c4142;
+}
+
+
+
+
+
+
+
+
+
+
