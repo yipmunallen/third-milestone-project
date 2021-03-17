@@ -1,46 +1,134 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <section id="watchlist-header" class="main-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 mx-auto watchlist-intro">
-                        <h3>
-                            Welcome, {{ username }}
-                        </h3>
-                    </div>
+<div class="container main-content">
+    <div class="row">
+        <div class="col-lg-12 card-margin">
+            <div class="card search-form">
+                <div class="card-body p-0">
+                    <form id="search-form">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row no-gutters">
+                                    <div class="col-10 p-0">
+                                        <input type="text" placeholder="Search..." class="form-control" id="search" name="search">
+                                    </div>
+                                    <div class="col-2 p-0">
+                                        <button type="submit" class="btn">
+                                            <i class="fa fa-search fa-2x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-    </section>
-    <section id="watchlist-main">
-        <div class="watchlist-items col-6 mx-auto">
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-margin">
+                <div class="card-body">
+                    <div class="row search-body">
+                        <div class="col-lg-12">
+                            <div class="search-result">
+                                <div class="browse-header">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="records">Showing: <b>1-20</b> of <b>200</b> result</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="result-actions">
+                                                <div class="result-sorting">
+                                                    <span>Sort By:</span>
+                                                    <select class="form-control border-0" id="exampleOption">
+                                                        <option value="1">Relevance</option>
+                                                        <option value="2">Names (A-Z)</option>
+                                                        <option value="3">Names (Z-A)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="browse-body">
+                                    <div class="table-responsive table-hover">
+                                        <table class="table browse-content">
+                                            {% for stock in watched_stocks %}
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="stock-icon">
+                                                                <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                    <img src= "{{ stock.icon_url }}" alt="icon">
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-name">
+                                                                <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                    <h2>{{ stock.ticker_symbol }}</h2>
+                                                                    <h4>{{ stock.company_name }}</h4>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-market-name">
+                                                                <h5>{{ stock.market_name }}</h5>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-sector">
+                                                                <h5>{{ stock.sector }}</h5>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="stock-favourite">
+                                                                <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id) }}">
+                                                                    <i class="fas fa-check-square fa-2x"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="d-flex justify-content-center">
+                        <ul class="pagination pagination-base pagination-boxed pagination-square mb-0">
+                            <li class="page-item">
+                                <a class="page-link no-border" href="#">
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link no-border" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link no-border" href="#">4</a></li>
+                            <li class="page-item">
+                                <a class="page-link no-border" href="#">
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            <div class="d-flex w-100 justify-content-between">
-              <p class="mb-1">Some placeholder content in a paragraph.</p>
-              <i class="fas fa-angle-right"></i>
-            </div>
-            <small class="text-muted">And some muted small print.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Some placeholder content in a paragraph.</p>
-            <small class="text-muted">And some muted small print.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Some placeholder content in a paragraph.</p>
-            <small class="text-muted">And some muted small print.</small>
-          </a>
-        </div>    
-    </section>    
-    
+        </div>
+    </div>
+</div>
+ 
 {% endblock %}
+
+
+                                         
+
+
+
