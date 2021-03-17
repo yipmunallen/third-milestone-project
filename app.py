@@ -109,6 +109,26 @@ def watchlist(username):
     # Else return back to login
     return redirect(url_for("login"))
 
+
+@app.route("/remove_from_watchlist/<stock_id>")
+def remove_from_watchlist(stock_id):
+    username = users_coll.find_one(
+        {"username": session["user"]})
+
+    users_coll.find_one_and_update(
+        {"username": session["user"]},
+        {"$pull": {"watched_stocks": ObjectId(stock_id)}})
+    return redirect(url_for("watchlist", username=username))
+
+
+@app.route("/add_to_watchlist/<stock_id>")
+def add_to_watchlist(stock_id):
+    users_coll.find_one_and_update(
+        {"username": session["user"]},
+        {"$push": {"watched_stocks": ObjectId(stock_id)}})
+    return redirect(url_for("browse"))
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
