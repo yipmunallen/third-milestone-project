@@ -17,6 +17,9 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+users_coll = mongo.db.users
+stocks_coll = mongo.db.stocks
+comments_coll = mongo.db.comments
 
 @app.route("/")
 @app.route("/index")
@@ -27,7 +30,7 @@ def index():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        existing_user = mongo.db.users.find_one(
+        existing_user = users_coll.find_one(
             {"username": request.form.get("username").lower()})
 
         if existing_user:
@@ -36,10 +39,11 @@ def signup():
 
         signup = {
             "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get("password"))
+            "password": generate_password_hash(request.form.get("password")),
+            "watched_stocks": []
         }
 
-        mongo.db.users.insert_one(signup)
+        users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
         flash("Registration Successful!")
         # return redirect(url_for("watchlist", username=session["user"]))
@@ -50,7 +54,7 @@ def signup():
 def login():
     if request.method == "POST":
         # check if username exists in db
-        existing_user = mongo.db.users.find_one(
+        existing_user = users_coll.find_one(
             {"username": request.form.get("username").lower()})
 
         if existing_user:
@@ -74,22 +78,36 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/watchlist/<username>", methods=["GET", "POST"])
-def watchlist(username):
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
-    if session["user"]:
-        return render_template("watchlist.html", username=username)
-    # Else return back to login
-    return redirect(url_for("login"))
-
-
 @app.route("/browse")
 def browse():
-    stocks = mongo.db.stocks.find().sort("ticker_symbol")
+    stocks = stocks_coll.find().sort("ticker_symbol")
     return render_template("browse.html", stocks=stocks)
 
+
+@app.route("/get_stock/<stock_id>")
+def get_stock(stock_id):
+    stock = stocks_coll.find_one({"_id": ObjectId(stock_id)})
+    return render_template("stock.html", stock=stock)
+
+
+@app.route("/watchlist/<username>", methods=["GET", "POST"])
+def watchlist(username):
+    username = users_coll.find_one(
+        {"username": session["user"]})
+    # Create an empty array for watched stocks
+    watched_stocks = []
+    if session["user"]:
+        # For each of the user's watched_stocks, finds the corresponding
+        # id in the stocks collection and populates into temporary chain
+        for stock in username["watched_stocks"]:
+            watched_stocks_list = stocks_coll.find_one({
+                "_id": ObjectId(stock)})
+            watched_stocks.append(watched_stocks_list)
+        return render_template("watchlist.html",
+                                username=username,
+                                watched_stocks=watched_stocks)
+    # Else return back to login
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
