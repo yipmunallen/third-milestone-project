@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container main-content">
+    <div class="row">
+        <div class="col-md-1 text-center">
+            <button onclick="history.back();" class="goback"><i class="fas fa-arrow-circle-left fa-3x" ></i><p>Back</p> </button>          
+        </div>
+        <div class="col-md-11">
+            <div class="card card-margin">
+                <div class="card-body">
+                    <div class="row search-body">
+                        <div class="col-12 stock-info">
+                            <div class="row stock-header align-items-center">
+                                <div class="col-4 col-sm-3 col-md-2 stock-image">
+                                    <img src= "{{ stock.icon_url }}" alt="icon">
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-5 stock-name">
+                                    <h1>{{ stock.company_name }}</h1>
+                                    <h3>{{ stock.ticker_symbol }}</h3>
+                                </div>
+                                <div class="col-12 col-sm-4 col-md-4 stock-watchlist">
+                                    <a href="{{ url_for('add_to_watchlist', stock_id=stock._id) }}" class="stock-page-button float-right">
+                                        <i class="far fa-plus-square fa-2x stock-watchlist-button"></i>
+                                        &nbsp add to watchlist
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="accordion company-details-accordian" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-header mb-0" id="headingOne">
+                                        <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <h3>Company Details</h3>
+                                        </button>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="card-body ">
+                                            <table class="table table-borderless company-details-table">
+                                              <tbody>
+                                                <tr>
+                                                  <th>About</th>
+                                                  <td>{{ stock.company_details }}</td>
+                                                </tr>                                              
+                                                <tr>
+                                                  <th>Market Name</th>
+                                                  <td>{{ stock.market_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                  <th>Currency</th>
+                                                  <td>{{ stock.currency }}</td>
+                                                </tr>
+                                                <tr>
+                                                  <th>Country</th>
+                                                  <td>{{ stock.country }}</td>
+                                                </tr>
+                                                <tr>
+                                                  <th>Sector</th>
+                                                  <td>{{ stock.sector }}</td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-section">
+                <div class="row">
+                    <div class="col-12 comments-form">
+                        <div class="card">
+                          <div class="card-header">
+                            <i class="far fa-comments fa-3x"></i>
+                          </div>
+                        </div>
+                        <form class="text-right">
+                            <div class="form-group">
+                                <textarea class="form-control" id="commentsInput" rows="3" placeholder="Add comment..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h4>4 Comments</h4><hr/>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-12 comments-header">
+                            <span id="comment-username">John Doe</span> 
+                            <span id="comment-time">10/02/2020 04:53:00</span>
+                            <p id="comment-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <span id="comment-edit">Edit</span> 
+                            <span id="comment-delete">Delete</span>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
