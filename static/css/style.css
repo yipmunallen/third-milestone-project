@@ -216,3 +216,67 @@ a {
   color: #3c4142;
 }
 
+/* Stock */
+
+.stock-image{
+    min-width: 10rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+.stock-image img {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+}
+
+.stock-name{
+    white-space: nowrap;
+}
+
+.stock-watchlist{
+    white-space: nowrap;
+}
+
+.stock-page-button{
+    padding: 1.1rem;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.stock-watchlist-button{
+    line-height: 10rem;
+    vertical-align: middle;
+}
+
+.company-details-table tbody tr th{
+    width: 12rem;
+}
+
+.company-details-table tbody tr th,
+.company-details-table tbody tr td{
+    font-size: 1.3rem;
+}
+
+/* Stock comments */
+
+#commentsInput{
+    font-size:1.3rem;
+}
+
+.comments-header{
+    list-style-type:none;
+}
+
+.comments-header span{
+  display: inline-block;
+  padding-bottom: 1rem;
+}
+
+#comment-time{
+    margin-left: 2rem;
+}
+
+#comment-body{
+    font-size: 1.3rem;
+}
