@@ -79,9 +79,9 @@
                             <i class="far fa-comments fa-3x"></i>
                           </div>
                         </div>
-                        <form class="text-right">
+                        <form class="text-right" method="POST" action="{{ url_for('add_comment', stock_id=stock._id) }}">
                             <div class="form-group">
-                                <textarea class="form-control" id="commentsInput" rows="3" placeholder="Add comment..."></textarea>
+                                <textarea class="form-control" id="commentsInput" name="stock-comment" rows="3" placeholder="Add comment..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -92,15 +92,17 @@
                         <h4>4 Comments</h4><hr/>
                     </div>
                 </div>
-                    <div class="row">
+                <div class="row">
+                    {% for comment in comments %}
                         <div class="col-12 comments-header">
-                            <span id="comment-username">John Doe</span> 
-                            <span id="comment-time">10/02/2020 04:53:00</span>
-                            <p id="comment-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            <span id="comment-edit">Edit</span> 
-                            <span id="comment-delete">Delete</span>
+                            <span id="comment-username">{{ comment.username }}</span> 
+                            <span id="comment-time">{{ comment.date_created }}</span>
+                            <p id="comment-body">{{ comment.comment }}</p>
+                            <span id="comment-edit">Delete</span> 
+                            <span id="comment-delete">Edit</span>
                         </div>
-                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
