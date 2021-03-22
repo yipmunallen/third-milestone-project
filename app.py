@@ -5,6 +5,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 if os.path.exists("env.py"):
     import env
 
@@ -87,7 +88,31 @@ def browse():
 @app.route("/get_stock/<stock_id>")
 def get_stock(stock_id):
     stock = stocks_coll.find_one({"_id": ObjectId(stock_id)})
-    return render_template("stock.html", stock=stock)
+    comments = []
+    # Loops over the ObjectId's in the story_chains array in the story document
+    for comment in stock["comments"]:
+        stock_comments = comments_coll.find_one({"_id": ObjectId(comment)})
+        # pushes those chain id's into the empty list)
+        comments.append(stock_comments)
+    return render_template("stock.html", stock=stock
+                                        ,comments=comments)
+
+
+@app.route("/add_comment/<stock_id>", methods=["POST"])
+def add_comment(stock_id):
+    created_on = datetime.today().strftime('%d/%m/%Y, %H:%M:%S')
+    new_comment = {
+        "username": session["user"],
+        "date_created": created_on,
+        "comment": request.form.get("stock-comment")
+    }
+    insert_comment = comments_coll.insert_one(new_comment)
+    stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                            {"$push": {"comments":
+                            {"$each": [insert_comment.inserted_id],
+                            "$position": 0}}})
+    return redirect(url_for("get_stock",
+                        stock_id=stock_id))
 
 
 @app.route("/watchlist/<username>", methods=["GET", "POST"])
