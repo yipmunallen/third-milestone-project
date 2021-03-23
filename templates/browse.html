@@ -53,10 +53,19 @@
                                     </div>
                                 </div>
                                 <div class="browse-body">
-                                    <div class="table-responsive table-hover">
-                                        <table class="table browse-content">
-                                            {% for stock in stocks %}
-                                                <tbody>
+                                    <div class="table-responsive table-hover tableFixHead">
+                                        <table class="table table-content">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Market</th>
+                                                <th scope="col">Sector</th>
+                                                <th scope="col"></th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for stock in stocks %}
                                                     <tr>
                                                         <td>
                                                             <div class="stock-icon">
@@ -91,8 +100,8 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                </tbody>
-                                            {% endfor %}
+                                                {% endfor %}
+                                            </tbody> 
                                         </table>
                                     </div>
                                 </div>
