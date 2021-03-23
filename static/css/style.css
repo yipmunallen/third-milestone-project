@@ -280,3 +280,12 @@ a {
 #comment-body{
     font-size: 1.3rem;
 }
+
+#edit-comment-form{
+    display:none;
+}
+
+#edit-comment,#delete-comment{
+    float: right;
+    padding-right: 2rem;
+}
