@@ -115,6 +115,24 @@ def add_comment(stock_id):
                         stock_id=stock_id))
 
 
+@app.route("/edit_comment/<stock_id>/<comment_id>", methods=["POST"])
+def edit_comment(stock_id, comment_id):
+    edited_comment = request.form.get("edited-comment")
+    comments_coll.update_one({"_id": ObjectId(comment_id)},
+                            {"$set": {"comment": edited_comment}})
+    return redirect(url_for("get_stock",
+                        stock_id=stock_id))
+
+
+@app.route("/delete_comment/<stock_id>/<comment_id>")
+def delete_comment(stock_id, comment_id):
+    comments_coll.remove({"_id": ObjectId(comment_id)})
+    stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                            {"$pull": {"comments": ObjectId(comment_id)}})
+    return redirect(url_for("get_stock",
+                        stock_id=stock_id))
+
+
 @app.route("/watchlist/<username>", methods=["GET", "POST"])
 def watchlist(username):
     username = users_coll.find_one(
