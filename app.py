@@ -93,8 +93,17 @@ def browse():
         username = users_coll.find_one(
             {"username": session["user"]})
         watched_stocks = username["watched_stocks"]
-        return render_template("browse.html", stocks=stocks, watched_stocks=watched_stocks)
+        return render_template("browse.html", 
+                                stocks=stocks, 
+                                watched_stocks=watched_stocks)
     return render_template("browse.html", stocks=stocks)    
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("search")
+    stocks = list(stocks_coll.find({"$text": {"$search": query}}))
+    return render_template("browse.html", stocks=stocks)
 
 
 @app.route("/get_stock/<stock_id>")
