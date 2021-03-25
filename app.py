@@ -170,6 +170,8 @@ def watchlist(username):
             watched_stocks_list = stocks_coll.find_one({
                 "_id": ObjectId(stock)})
             watched_stocks.append(watched_stocks_list)
+        # https://therenegadecoder.com/code/how-to-sort-a-list-of-dictionaries-in-python/
+        watched_stocks.sort(key=lambda item: item.get("ticker_symbol"))
         return render_template("watchlist.html",
                                 username=username,
                                 watched_stocks=watched_stocks)
