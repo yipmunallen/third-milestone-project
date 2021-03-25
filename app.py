@@ -79,23 +79,38 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/logout")
+def logout():
+    flash("You have been logged out")
+    session.pop("user")
+    return redirect(url_for("index"))
+
+
 @app.route("/browse")
 def browse():
     stocks = stocks_coll.find().sort("ticker_symbol")
-    return render_template("browse.html", stocks=stocks)
+    if "user" in session:
+        username = users_coll.find_one(
+            {"username": session["user"]})
+        watched_stocks = username["watched_stocks"]
+        return render_template("browse.html", stocks=stocks, watched_stocks=watched_stocks)
+    return render_template("browse.html", stocks=stocks)    
 
 
 @app.route("/get_stock/<stock_id>")
 def get_stock(stock_id):
     stock = stocks_coll.find_one({"_id": ObjectId(stock_id)})
     comments = []
+    commentsNo = 0
     # Loops over the ObjectId's in the story_chains array in the story document
     for comment in stock["comments"]:
         stock_comments = comments_coll.find_one({"_id": ObjectId(comment)})
         # pushes those chain id's into the empty list)
         comments.append(stock_comments)
+        commentsNo += 1
     return render_template("stock.html", stock=stock
-                                        ,comments=comments)
+                                        ,comments=comments
+                                        ,comments_no=commentsNo)
 
 
 @app.route("/add_comment/<stock_id>", methods=["POST"])
