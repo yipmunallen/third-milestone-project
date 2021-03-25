@@ -13,7 +13,7 @@ body,html {
 
 body{
     font-family: 'Roboto', sans-serif;
-    color: #011663;
+    color: #324B4E;
 }
 
 .main-content{
@@ -30,6 +30,11 @@ a {
     background-color: transparent;
     margin-top: 3rem;
     display: block;
+}
+
+.buttonToLink{
+   background: none;
+   border: none;
 }
 
 /* Nav Bar */
@@ -55,7 +60,7 @@ a {
 }
 
 #hero-text{
-    color: white;
+    color: #E6F4F1;
     position: absolute; 
     width: 45rem;
     padding: 2.5rem 2.5rem;
@@ -73,7 +78,8 @@ a {
 /* Forms */
 
 .form-flash{
-    color: red;
+    color: #FF8B41;
+    font-size: 1.5rem;
 }
 
 .form-label, .btn-forms{
@@ -124,7 +130,7 @@ a {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    border: 1px solid #e6e4e9;
+    border: 1px solid #E6F4F1;
     border-radius: 8px;
     box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
     -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
@@ -150,13 +156,13 @@ a {
     min-width: 10rem;
 }
 
-.table-content .stock-favourite .far {
+.table-content .stock-favourite {
     margin-top: 1rem;
-    color: #13bdb4;
+    color: #1A8A94;
 }
 
-.table-content .stock-favourite svg.starred {
-    fill: #fd8b2c;
+.table-content .stock-not-favourite {
+    margin-top: 1rem;
 }
 
 .search-form {
@@ -188,10 +194,6 @@ a {
     margin-bottom: 2rem;
 }
 
-.search-body .search-result .browse-header .records {
-    color: #3c4142;
-}
-
 .search-body .search-result .browse-header .result-actions {
     text-align: right;
     display: flex;
@@ -209,11 +211,20 @@ a {
 }
 
 .search-body .search-result .browse-header .result-actions .result-sorting select {
-  color: #68CBD7;
+  color: #1A8A94;
 }
 
 .search-body .search-result .browse-header .result-actions .result-sorting select option {
   color: #3c4142;
+}
+
+.modal-buttons{
+    display: table-cell;
+    margin: 0 auto;
+}
+
+.modal-buttons ul li{
+    display: inline-block;
 }
 
 /* Stock */
@@ -289,3 +300,4 @@ a {
     float: right;
     padding-right: 2rem;
 }
+
