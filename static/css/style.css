@@ -26,12 +26,6 @@ a {
     text-decoration: none !important; /* no underline */
 }
 
-.goback{
-    background-color: transparent;
-    margin-top: 3rem;
-    display: block;
-}
-
 .buttonToLink{
    background: none;
    border: none;
