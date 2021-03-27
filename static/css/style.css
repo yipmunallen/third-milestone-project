@@ -38,6 +38,10 @@ a {
     margin-left: 1rem;
 }
 
+.cursor-pointer{
+    cursor: pointer;
+}
+
 /* Nav Bar */
 
 .navbar-brand {
@@ -268,6 +272,16 @@ a {
 .company-details-table tbody tr th,
 .company-details-table tbody tr td{
     font-size: 1.3rem;
+}
+
+.submit-button{
+    background-color: #1A8A94;
+    color: white;
+}
+
+.cancel-button{
+    background-color: #B25076;
+    color: white;
 }
 
 /* Stock comments */
