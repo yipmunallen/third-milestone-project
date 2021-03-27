@@ -10,3 +10,17 @@ $('#edit-comment').on('click',function(){
     $('#delete-comment').css('display','none');
 
 });
+
+$('#cancel-edit-comment').on('click',function(){
+
+    $('#comment-body').css('display','block');
+    $('#edit-comment-form').css('display','none');
+    $('#edit-comment').css('display','block');
+    $('#delete-comment').css('display','block');
+
+});
+
+
+window.addEventListener("pageshow", () => {
+  // update hidden input field
+});
