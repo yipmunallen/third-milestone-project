@@ -37,6 +37,13 @@ a {
    border: none;
 }
 
+.login-button{
+    background-color: #1A8A94;
+    color: white;
+    font-size: 1.3rem;
+    margin-left: 1rem;
+}
+
 /* Nav Bar */
 
 .navbar-brand {
@@ -271,6 +278,10 @@ a {
 
 /* Stock comments */
 
+.comments-number{
+    margin-top: 1.5rem;
+}
+
 .comment-input{
     font-size:1.3rem;
 }
@@ -300,4 +311,3 @@ a {
     float: right;
     padding-right: 2rem;
 }
-
