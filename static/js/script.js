@@ -19,8 +19,3 @@ $('#cancel-edit-comment').on('click',function(){
     $('#delete-comment').css('display','block');
 
 });
-
-
-window.addEventListener("pageshow", () => {
-  // update hidden input field
-});
