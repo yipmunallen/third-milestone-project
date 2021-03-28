@@ -12,12 +12,35 @@
                                 <div class="col-4 col-sm-3 col-md-2 stock-image">
                                     <img src= "{{ stock.icon_url }}" alt="icon">
                                 </div>
-                                <div class="col-4 col-sm-4 col-md-5 stock-name">
+                                <div class="col-4 col-sm-3 col-md-4 stock-name">
                                     <h1>{{ stock.company_name }}</h1>
                                     <h3>{{ stock.ticker_symbol }}</h3>
+                                    <div class="stock-price-mobile">
+                                        {% if price_change < 0.00 %}
+                                            {{stock_price}}<span class="color-red">&nbsp{{price_change}}({{percentage_change}}%)</span>
+                                        {% else %}
+                                            <h3>{{stock_price}}</h3><h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
+                                        {% endif %}
+                                    </div>
+                                    {% if session.user %}
+                                        <div class="stock-watchlist-mobile">
+                                            <a href="{{ url_for('add_to_watchlist', stock_id=stock._id) }}" class="stock-page-button">
+                                                <i class="far fa-plus-square fa-lg stock-watchlist-button"></i>
+                                                &nbsp add to watchlist
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-2 col-md-2 stock-price-desktop">
+                                    <h1>{{stock_price}}</h1>
+                                    {% if price_change < 0.00 %}
+                                        <h3 class="color-red">{{price_change}}({{percentage_change}}%)</h3>
+                                    {% else %}
+                                        <h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
+                                    {% endif %}
                                 </div>
                                 {% if session.user %}
-                                    <div class="col-12 col-sm-4 col-md-4 stock-watchlist">
+                                    <div class="col-3 stock-watchlist-desktop">
                                         <a href="{{ url_for('add_to_watchlist', stock_id=stock._id) }}" class="stock-page-button float-right">
                                             <i class="far fa-plus-square fa-2x stock-watchlist-button"></i>
                                             &nbsp add to watchlist
