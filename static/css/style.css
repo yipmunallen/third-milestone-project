@@ -31,7 +31,14 @@ a {
    border: none;
 }
 
-.login-button{
+.form-button{
+    background-color: #1A8A94;
+    color: white;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.buttons{
     background-color: #1A8A94;
     color: white;
     font-size: 1.3rem;
