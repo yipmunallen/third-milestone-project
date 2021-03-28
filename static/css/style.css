@@ -49,6 +49,14 @@ a {
     cursor: pointer;
 }
 
+.color-red{
+    color: red;
+}
+
+.color-green{
+    color: green;
+}
+
 /* Nav Bar */
 
 .navbar-brand {
@@ -134,7 +142,6 @@ a {
         margin-bottom: 5rem;
     }
 }
-
 
 .card {
     position: relative;
@@ -257,19 +264,65 @@ a {
     white-space: nowrap;
 }
 
-.stock-watchlist{
+.stock-price-mobile{
     white-space: nowrap;
+    font-size: 1.5rem;
+}
+
+.stock-price-mobile .color-red,
+.stock-price-mobile .color-green {
+    white-space: nowrap;
+    font-size: 1.5rem;
+}
+
+.stock-watchlist-mobile{
+    margin-top: 1rem;
+}
+
+.stock-price-desktop{
+    display: none;
+}
+
+.stock-watchlist-desktop{
+    display: none;
 }
 
 .stock-page-button{
-    padding: 1.1rem;
-    font-size: 1.5rem;
+    padding-top: 1.1rem;
+    font-size: 1.3rem;
     text-decoration: none;
 }
 
+
 .stock-watchlist-button{
-    line-height: 10rem;
+    line-height: 1rem;
     vertical-align: middle;
+}
+
+
+@media (min-width: 800px) {
+    .stock-price-desktop{
+        display: block;
+        white-space: nowrap;
+        margin-top: 0;
+    }
+
+    .stock-price-mobile{
+        display: none;
+    }
+
+    .stock-watchlist-desktop{
+        display: block;
+        white-space: nowrap;
+    }
+
+    .stock-page-button{
+        font-size: 1.4rem;
+    }
+
+    .stock-watchlist-mobile{
+        display:none;
+    }
 }
 
 .company-details-table tbody tr th{
@@ -279,16 +332,6 @@ a {
 .company-details-table tbody tr th,
 .company-details-table tbody tr td{
     font-size: 1.3rem;
-}
-
-.submit-button{
-    background-color: #1A8A94;
-    color: white;
-}
-
-.cancel-button{
-    background-color: #B25076;
-    color: white;
 }
 
 /* Stock comments */
@@ -325,4 +368,14 @@ a {
 #edit-comment,#delete-comment{
     float: right;
     padding-right: 2rem;
+}
+
+.submit-button{
+    background-color: #1A8A94;
+    color: white;
+}
+
+.cancel-button{
+    background-color: #B25076;
+    color: white;
 }
