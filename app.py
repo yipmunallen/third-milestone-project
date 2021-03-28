@@ -1,4 +1,5 @@
 import os
+import yfinance as yf
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -109,6 +110,22 @@ def search():
 @app.route("/get_stock/<stock_id>")
 def get_stock(stock_id):
     stock = stocks_coll.find_one({"_id": ObjectId(stock_id)})
+    # Get current stock price from yfinance api
+    # https://stackoverflow.com/questions/61104362/how-to-get-actual-stock-prices-with-yfinance
+    ticker = yf.Ticker(stock["ticker_symbol"])
+    todays_data = ticker.history(period='1d')
+    stock_price_raw = todays_data['Close'][0]
+    stock_price = round(stock_price_raw, 2)
+    # Get yesterday's stock price at close from yfinance api
+    yesterday_data = ticker.history(period='2d')
+    yesterday_data_raw = yesterday_data['Close'][0]
+    # Calculate change in price and percentage change
+    # between yesterday close and today
+    percentage_change_raw = 100*(stock_price_raw - yesterday_data_raw)/yesterday_data_raw
+    percentage_change = round(percentage_change_raw, 2)
+    price_change_raw = stock_price_raw - yesterday_data_raw
+    price_change = round(price_change_raw, 2)
+    # Create empty comments array and set number of comments to 0
     comments = []
     commentsNo = 0
     # Loops over the ObjectId's in the story_chains array in the story document
@@ -118,6 +135,9 @@ def get_stock(stock_id):
         comments.append(stock_comments)
         commentsNo += 1
     return render_template("stock.html", stock=stock
+                                        , stock_price=stock_price
+                                        , percentage_change=percentage_change
+                                        , price_change=price_change
                                         ,comments=comments
                                         ,comments_no=commentsNo)
 
