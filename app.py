@@ -134,12 +134,20 @@ def get_stock(stock_id):
         # pushes those chain id's into the empty list)
         comments.append(stock_comments)
         commentsNo += 1
+    if session["user"]:
+        result = users_coll.find_one({"username": session["user"],
+                "watched_stocks": ObjectId(stock_id)})
+        if result == None:
+            watched_stock = False
+        else:
+            watched_stock = True
     return render_template("stock.html", stock=stock
                                         , stock_price=stock_price
                                         , percentage_change=percentage_change
                                         , price_change=price_change
-                                        ,comments=comments
-                                        ,comments_no=commentsNo)
+                                        , comments=comments
+                                        , comments_no=commentsNo
+                                        , watched_stock=watched_stock)
 
 
 @app.route("/add_comment/<stock_id>", methods=["POST"])
@@ -199,23 +207,33 @@ def watchlist(username):
     return redirect(url_for("login"))
 
 
-@app.route("/remove_from_watchlist/<stock_id>")
-def remove_from_watchlist(stock_id):
+@app.route("/remove_from_watchlist/<stock_id>/<url>")
+def remove_from_watchlist(stock_id, url):
     username = users_coll.find_one(
         {"username": session["user"]})
 
     users_coll.find_one_and_update(
         {"username": session["user"]},
         {"$pull": {"watched_stocks": ObjectId(stock_id)}})
-    return redirect(url_for("watchlist", username=username))
+    if url == "browse":
+        return redirect(url_for("browse"))
+    elif url == "stock":
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
+    else:
+        return redirect(url_for("watchlist", username=username))
 
 
-@app.route("/add_to_watchlist/<stock_id>")
-def add_to_watchlist(stock_id):
+@app.route("/add_to_watchlist/<stock_id>/<url>")
+def add_to_watchlist(stock_id, url):
     users_coll.find_one_and_update(
         {"username": session["user"]},
         {"$push": {"watched_stocks": ObjectId(stock_id)}})
-    return redirect(url_for("browse"))
+    if url == "browse":
+        return redirect(url_for("browse"))
+    else:
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
 
 
 if __name__ == "__main__":
