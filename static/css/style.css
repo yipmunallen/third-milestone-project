@@ -57,6 +57,10 @@ a {
     color: green;
 }
 
+.table-margin-top{
+    margin-top: 1rem;
+}
+
 /* Nav Bar */
 
 .navbar-brand {
@@ -131,6 +135,10 @@ a {
     margin-top: 3rem;
 }
 
+.empty-watchlist{
+    margin-top: 3rem;
+}
+
 /* Browse */
 
 .card-margin {
@@ -185,8 +193,15 @@ a {
 }
 
 .search-form {
-    width: 60%;
+    width: 100%;
     margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .search-form {
+        width: 60%;
+        margin: 0 auto;
+    }
 }
 
 .search-form input {
@@ -209,31 +224,27 @@ a {
     margin-bottom: 1.5rem;
 }
 
-.search-body .search-result .browse-header {
-    margin-bottom: 2rem;
-}
-
-.search-body .search-result .browse-header .result-actions {
+.result-actions {
     text-align: right;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.search-body .search-result .browse-header .result-actions .result-sorting {
+.result-sorting {
   display: flex;
   align-items: center;
 }
 
-.search-body .search-result .browse-header .result-actions .result-sorting span {
+.result-sorting span {
   flex-shrink: 0;
 }
 
-.search-body .search-result .browse-header .result-actions .result-sorting select {
+.result-sorting select {
   color: #1A8A94;
 }
 
-.search-body .search-result .browse-header .result-actions .result-sorting select option {
+.result-sorting select option {
   color: #3c4142;
 }
 
@@ -244,6 +255,10 @@ a {
 
 .modal-buttons ul li{
     display: inline-block;
+}
+
+.watchlist-title{
+    color: #1A8A94;
 }
 
 /* Stock */
