@@ -3,7 +3,7 @@
 
 <div class="container main-content">
     <div class="row">
-        <div class="col-lg-12 card-margin">
+        <div class="col-12 card-margin">
             <div class="card search-form">
                 <div class="card-body p-0">
                     <form action="{{ url_for('search') }}" method="post" id="search-form">
@@ -35,75 +35,79 @@
                             <div class="search-result">
                                 <div class="browse-header">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="records">Showing: <b>1-20</b> of <b>200</b> result</div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="result-actions">
-                                                <div class="result-sorting">
-                                                    <span>Sort By:</span>
-                                                    <select class="form-control border-0" id="exampleOption">
-                                                        <option value="1">Relevance</option>
-                                                        <option value="2">Names (A-Z)</option>
-                                                        <option value="3">Names (Z-A)</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                        <div class="col-12">
+                                            <h1 class="watchlist-title">WATCHLIST</h1>
+                                            {% if watched_stocks|length > 0 %}
+                                                {% if watched_stocks|length == 1 %}
+                                                    <h5 class="record-number">{{ watched_stocks|length }} watched stock</h5>
+                                                {% else %}
+                                                    <h5 class="record-number">{{ watched_stocks|length }} watched stocks</h5>
+                                                {% endif %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="browse-body">
-                                    <div class="table-responsive table-hover">
-                                        <table class="table table-content">                                           
-                                            <thead>
-                                              <tr>
-                                                <th scope="col"></th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Market</th>
-                                                <th scope="col">Sector</th>
-                                                <th scope="col"></th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for stock in watched_stocks %}
-                                                <tr>
-                                                    <td>
-                                                        <div class="stock-icon">
-                                                            <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                <img src= "{{ stock.icon_url }}" alt="icon">
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="stock-name">
-                                                            <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                <h2>{{ stock.ticker_symbol }}</h2>
-                                                                <h4>{{ stock.company_name }}</h4>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="stock-market-name">
-                                                            <h5>{{ stock.market_name }}</h5>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="stock-sector">
-                                                            <h5>{{ stock.sector }}</h5>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="stock-favourite">
-                                                            <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id , url='watchlist') }}">
-                                                                <i class="fas fa-check-square fa-2x"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>                                           
-                                        </table>
-                                    </div>
+                                    {% if watched_stocks|length > 0 %}
+                                        <div class="table-responsive table-hover table-margin-top">
+                                            <table class="table table-content">                                           
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col"></th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Market</th>
+                                                    <th scope="col">Sector</th>
+                                                    <th scope="col"></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for stock in watched_stocks %}
+                                                        <tr>
+                                                            <td>
+                                                                <div class="stock-icon">
+                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                        <img src= "{{ stock.icon_url }}" alt="icon">
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="stock-name">
+                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                        <h2>{{ stock.ticker_symbol }}</h2>
+                                                                        <h4>{{ stock.company_name }}</h4>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="stock-market-name">
+                                                                    <h5>{{ stock.market_name }}</h5>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="stock-sector">
+                                                                    <h5>{{ stock.sector }}</h5>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="stock-favourite">
+                                                                    <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id , url='watchlist') }}">
+                                                                        <i class="fas fa-check-square fa-2x"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>                                           
+                                            </table>
+                                        </div>
+                                    {% else %} 
+                                        <hr/>
+                                        <div class="empty-watchlist text-center">
+                                            <h2>Your watchlist is currently empty!</h2>
+                                            <h4>Use the search bar above or browse all stocks</h4>
+                                            <a class="btn form-button" href="{{ url_for( 'browse' ) }}">Browse</a>
+                                        </div>
+                                    {% endif %}    
                                 </div>
                             </div>
                         </div>
