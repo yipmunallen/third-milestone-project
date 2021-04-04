@@ -87,26 +87,50 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/browse")
-def browse():
-    stocks = stocks_coll.find().sort("ticker_symbol")
+@app.route("/browse/<filter>")
+def browse(filter):
+    if filter == "ALL":
+        stocks = stocks_coll.find().sort("ticker_symbol")
+    elif filter == "USA":
+        stocks = stocks_coll.find({"country": "USA" }).sort("ticker_symbol")
+    elif filter == "UK":
+        stocks = stocks_coll.find({"country": "UK" }).sort("ticker_symbol")
+    elif filter == "NASDAQ":
+        stocks = stocks_coll.find({"market_name": "NASDAQ" }).sort("ticker_symbol")
+    elif filter == "NYSE":
+        stocks = stocks_coll.find({"market_name": "NYSE" }).sort("ticker_symbol")
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
         watched_stocks = username["watched_stocks"]
         return render_template("browse.html", 
                                 stocks=stocks, 
-                                watched_stocks=watched_stocks)
-    return render_template("browse.html", stocks=stocks)    
+                                watched_stocks=watched_stocks,
+                                filter=filter)
+    return render_template("browse.html",
+                            stocks=stocks,
+                            filter=filter)    
 
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("search")
+    return redirect(url_for('results', query=query))
+
+
+@app.route("/results/<query>", methods=["GET", "POST"])
+def results(query):
+    query = query
     stocks = list(stocks_coll.find({"$text": {"$search": query}}))
-    if len(stocks) == 0:
-        flash("No Results Found")
-    return render_template("browse.html", stocks=stocks)
+    if "user" in session:
+        username = users_coll.find_one(
+            {"username": session["user"]})
+        watched_stocks = username["watched_stocks"]
+        return render_template("results.html", 
+                                query=query, 
+                                watched_stocks=watched_stocks,
+                                stocks=stocks)
+    return render_template("results.html", query=query, stocks=stocks)
 
 
 @app.route("/get_stock/<stock_id>")
@@ -136,13 +160,15 @@ def get_stock(stock_id):
         # pushes those chain id's into the empty list)
         comments.append(stock_comments)
         commentsNo += 1
-    if session["user"]:
+    if 'user' in session:
         result = users_coll.find_one({"username": session["user"],
                 "watched_stocks": ObjectId(stock_id)})
         if result == None:
             watched_stock = False
         else:
             watched_stock = True
+    else:
+        watched_stock = False
     return render_template("stock.html", stock=stock
                                         , stock_price=stock_price
                                         , percentage_change=percentage_change
@@ -212,8 +238,8 @@ def watchlist(username):
     return redirect(url_for("login"))
 
 
-@app.route("/remove_from_watchlist/<stock_id>/<url>")
-def remove_from_watchlist(stock_id, url):
+@app.route("/remove_from_watchlist/<stock_id>/<url>/<filter>")
+def remove_from_watchlist(stock_id, url, filter):
     username = users_coll.find_one(
         {"username": session["user"]})
 
@@ -221,24 +247,37 @@ def remove_from_watchlist(stock_id, url):
         {"username": session["user"]},
         {"$pull": {"watched_stocks": ObjectId(stock_id)}})
     if url == "browse":
-        return redirect(url_for("browse"))
-    elif url == "stock":
-        return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+        return redirect(url_for("browse", filter=filter))
     else:
         return redirect(url_for("watchlist", username=username))
 
 
-@app.route("/add_to_watchlist/<stock_id>/<url>")
-def add_to_watchlist(stock_id, url):
+@app.route("/remove_from_watchlist_search/<stock_id>/<query>")
+def remove_from_watchlist_search(stock_id, query):
+    users_coll.find_one_and_update(
+        {"username": session["user"]},
+        {"$pull": {"watched_stocks": ObjectId(stock_id)}})
+    return redirect(url_for("results", query=query))
+
+
+@app.route("/add_to_watchlist/<stock_id>/<url>/<filter>")
+def add_to_watchlist(stock_id, url, filter):
     users_coll.find_one_and_update(
         {"username": session["user"]},
         {"$push": {"watched_stocks": ObjectId(stock_id)}})
     if url == "browse":
-        return redirect(url_for("browse"))
+        return redirect(url_for("browse", filter=filter))
     else:
         return redirect(url_for("get_stock",
                             stock_id=stock_id))
+
+
+@app.route("/add_to_watchlist_search/<stock_id>/<query>")
+def add_to_watchlist_search(stock_id, query):
+    users_coll.find_one_and_update(
+        {"username": session["user"]},
+        {"$push": {"watched_stocks": ObjectId(stock_id)}})
+    return redirect(url_for("results", query=query))
 
 
 if __name__ == "__main__":
