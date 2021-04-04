@@ -11,7 +11,7 @@
                             <div class="col-12">
                                 <div class="row no-gutters">
                                     <div class="col-10 p-0">
-                                        <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search">
+                                        <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search" required>
                                     </div>
                                     <div class="col-2 p-0">
                                         <button type="submit" class="btn">
@@ -90,7 +90,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="stock-favourite">
-                                                                    <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id , url='watchlist') }}">
+                                                                    <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id , url='watchlist', filter='none') }}">
                                                                         <i class="fas fa-check-square fa-2x"></i>
                                                                     </a>
                                                                 </div>
@@ -105,7 +105,7 @@
                                         <div class="empty-watchlist text-center">
                                             <h2>Your watchlist is currently empty!</h2>
                                             <h4>Use the search bar above or browse all stocks</h4>
-                                            <a class="btn form-button" href="{{ url_for( 'browse' ) }}">Browse</a>
+                                            <a class="btn form-button" href="{{ url_for('browse', filter='all') }}">Browse</a>
                                         </div>
                                     {% endif %}    
                                 </div>
