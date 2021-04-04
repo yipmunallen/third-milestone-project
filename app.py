@@ -64,7 +64,7 @@ def login():
             if check_password_hash(
                 existing_user["password"], request.form.get("password")):
                     session["user"] = request.form.get("username").lower()
-                    flash("Welcome, {}".format(request.form.get("username")))
+                    # flash("Welcome, {}".format(request.form.get("username")))
                     return redirect(url_for(
                         "watchlist", username=session["user"]))
             else:
@@ -104,6 +104,8 @@ def browse():
 def search():
     query = request.form.get("search")
     stocks = list(stocks_coll.find({"$text": {"$search": query}}))
+    if len(stocks) == 0:
+        flash("No Results Found")
     return render_template("browse.html", stocks=stocks)
 
 
@@ -163,6 +165,7 @@ def add_comment(stock_id):
                             {"$push": {"comments":
                             {"$each": [insert_comment.inserted_id],
                             "$position": 0}}})
+    flash("Your comment was succesfully added")
     return redirect(url_for("get_stock",
                         stock_id=stock_id))
 
@@ -172,6 +175,7 @@ def edit_comment(stock_id, comment_id):
     edited_comment = request.form.get("edited-comment")
     comments_coll.update_one({"_id": ObjectId(comment_id)},
                             {"$set": {"comment": edited_comment}})
+    flash("Your comment was succesfully edited")
     return redirect(url_for("get_stock",
                         stock_id=stock_id))
 
@@ -181,6 +185,7 @@ def delete_comment(stock_id, comment_id):
     comments_coll.remove({"_id": ObjectId(comment_id)})
     stocks_coll.update_one({"_id": ObjectId(stock_id)},
                             {"$pull": {"comments": ObjectId(comment_id)}})
+    flash("Your comment was succesfully deleted")
     return redirect(url_for("get_stock",
                         stock_id=stock_id))
 
