@@ -3,7 +3,7 @@
 
 <div class="container main-content">
     <div class="row">
-        <div class="col-lg-12 card-margin">
+        <div class="col-12 card-margin">
             <div class="card search-form">
                 <div class="card-body p-0">
                     <form action="{{ url_for('search') }}" method="post" id="search-form">
@@ -11,10 +11,10 @@
                             <div class="col-12">
                                 <div class="row no-gutters">
                                     <div class="col-10 p-0">
-                                        <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search">
+                                        <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search" required>
                                     </div>
                                     <div class="col-2 p-0">
-                                        <button type="submit" class="btn" >
+                                        <button type="submit" class="btn">
                                             <i class="fa fa-search fa-2x"></i>
                                         </button>
                                     </div>
@@ -28,6 +28,32 @@
     </div>
     <div class="row">
         <div class="col-12">
+            <div class="dropdown">
+                <a class="btn buttons" href="{{ url_for('browse', filter='ALL') }}">Show All</a>
+                <!-- https://mdbootstrap.com/snippets/jquery/mdbootstrap/949080#css-tab-view -->
+                <button class="btn buttons dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter
+                </button>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <li class="dropdown-submenu">
+                      <a  class="dropdown-item" tabindex="-1" href="{{ url_for('browse', filter='USA') }}">US Stocks</a>
+                      <ul class="dropdown-menu">
+                        <li class="dropdown-submenu">
+                          <span class="dropdown-item">Markets</span>
+                          <ul class="dropdown-menu">
+                            <li class="dropdown-item"><a href="{{ url_for('browse', filter='NASDAQ') }}">NASDAQ</a></li>
+                            <li class="dropdown-item"><a href="{{ url_for('browse', filter='NYSE') }}">NYSE</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                      <a class="dropdown-item" href="{{ url_for('browse', filter='UK') }}">UK Stocks</a>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card card-margin">
                 <div class="card-body">
                     <div class="row search-body">
@@ -35,25 +61,13 @@
                             <div class="search-result">
                                 <div class="browse-header">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="records">Showing: <b>1-20</b> of <b>200</b> result</div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="result-actions">
-                                                <div class="result-sorting">
-                                                    <span>Sort By:</span>
-                                                    <select class="form-control border-0" id="exampleOption">
-                                                        <option value="1">Relevance</option>
-                                                        <option value="2">Names (A-Z)</option>
-                                                        <option value="3">Names (Z-A)</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                        <div class="col-12">
+                                            <h1 class="watchlist-title">BROWSE > {{ filter }}</h1>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="browse-body">
-                                    <div class="table-responsive table-hover tableFixHead">
+                                    <div class="table-responsive table-hover table-margin-top">
                                         <table class="table table-content">
                                             <thead>
                                               <tr>
@@ -96,13 +110,13 @@
                                                             {% if session.user %}
                                                                 {% if stock._id in watched_stocks %}
                                                                     <div class="stock-favourite">
-                                                                        <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='browse') }}">
+                                                                        <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='browse', filter=filter) }}">
                                                                             <i class="fas fa-check-square fa-2x"></i>
                                                                         </a>
                                                                     </div>
                                                                 {% else %}
                                                                     <div class="stock-not-favourite">
-                                                                        <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='browse') }}">
+                                                                        <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='browse', filter=filter) }}">
                                                                             <i class="far fa-plus-square fa-2x"></i>
                                                                         </a>
                                                                     </div>
