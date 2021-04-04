@@ -141,6 +141,12 @@ a {
 
 /* Browse */
 
+.comment-alerts{
+    font-size: 1.3rem;
+    background-color: #1A8A94;
+    color: white;
+}
+
 .card-margin {
     margin-bottom: 2rem;
 }
