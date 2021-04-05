@@ -272,8 +272,8 @@ def watchlist(username):
         return redirect(url_for("index"))
 
 
-@app.route("/remove_from_watchlist/<stock_id>/<url>/<filter>")
-def remove_from_watchlist(stock_id, url, filter):
+@app.route("/remove_from_watchlist/<stock_id>/<url>/<filter>/<query>")
+def remove_from_watchlist(stock_id, url, filter, query):
     """ This removes a stock from the user's watchlist """
     if "user" in session:
         username = users_coll.find_one(
@@ -285,6 +285,8 @@ def remove_from_watchlist(stock_id, url, filter):
         # If this was removed from browse page, redirect back to there
         if url == "browse":
             return redirect(url_for("browse", filter=filter))
+        if url == "search":
+            return redirect(url_for("results", query=query))
         # Otherwise redirect to the user's watchlist
         else:
             return redirect(url_for("watchlist", username=username))
@@ -292,43 +294,25 @@ def remove_from_watchlist(stock_id, url, filter):
         return redirect(url_for("index"))
 
 
-@app.route("/remove_from_watchlist_search/<stock_id>/<query>")
-def remove_from_watchlist_search(stock_id, query):
-    """ This removes a stock from the user's watchlist from the search page """
-    if "user" in session:
-        # Remove the stock id from the user's watched_stocks 
-        users_coll.find_one_and_update(
-            {"username": session["user"]},
-            {"$pull": {"watched_stocks": ObjectId(stock_id)}})
-        return redirect(url_for("results", query=query))
-    else:
-        return redirect(url_for("index"))
-
-
-@app.route("/add_to_watchlist/<stock_id>/<url>/<filter>")
-def add_to_watchlist(stock_id, url, filter):
+@app.route("/add_to_watchlist/<stock_id>/<url>/<filter>/<query>")
+def add_to_watchlist(stock_id, url, filter, query):
     """ This adds a stock to the user's watchlist """
     if "user" in session:
         # Add the stock id to the user's watched stocks
         users_coll.find_one_and_update(
             {"username": session["user"]},
             {"$push": {"watched_stocks": ObjectId(stock_id)}})
-         # If this was added from browse page, redirect back to there
+        # If this was added from browse page, redirect back to there
         if url == "browse":
             return redirect(url_for("browse", filter=filter))
+        # If this was added from search page, redirect back to there
+        if url == "search":
+            return redirect(url_for("results", query=query))
         else:
             return redirect(url_for("get_stock",
                                 stock_id=stock_id))
     else:
         return redirect(url_for("index"))
-
-
-@app.route("/add_to_watchlist_search/<stock_id>/<query>")
-def add_to_watchlist_search(stock_id, query):
-    users_coll.find_one_and_update(
-        {"username": session["user"]},
-        {"$push": {"watched_stocks": ObjectId(stock_id)}})
-    return redirect(url_for("results", query=query))
 
 
 if __name__ == "__main__":
