@@ -92,13 +92,13 @@
                                                                 {% if session.user %}
                                                                     {% if stock._id in watched_stocks %}
                                                                         <div class="stock-favourite">
-                                                                            <a href="{{ url_for('remove_from_watchlist_search', stock_id=stock._id, query=query) }}">
+                                                                            <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
                                                                                 <i class="fas fa-check-square fa-2x"></i>
                                                                             </a>
                                                                         </div>
                                                                     {% else %}
                                                                         <div class="stock-not-favourite">
-                                                                            <a href="{{ url_for('add_to_watchlist_search', stock_id=stock._id, query=query) }}">
+                                                                            <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
                                                                                 <i class="far fa-plus-square fa-2x"></i>
                                                                             </a>
                                                                         </div>
