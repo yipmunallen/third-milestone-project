@@ -26,6 +26,7 @@ comments_coll = mongo.db.comments
 @app.route("/")
 @app.route("/index")
 def index():
+    """ This renders the index page """
     return render_template("index.html")
 
 
@@ -82,24 +83,27 @@ def login():
 
 @app.route("/logout")
 def logout():
+    """ This clears the session """
     flash("You have been logged out")
-    session.pop("user")
+    session.clear()
     return redirect(url_for("index"))
 
 
 @app.route("/browse/<filter>")
 def browse(filter):
+    """ This gets stocks for browse page """
+    countries = ['USA', 'UK']
+    stock_markets = ['NASDAQ', 'NYSE', 'LSE']
+    # If filter is all, find all stocks
     if filter == "ALL":
         stocks = stocks_coll.find().sort("ticker_symbol")
-    elif filter == "USA":
-        stocks = stocks_coll.find({"country": "USA" }).sort("ticker_symbol")
-    elif filter == "UK":
-        stocks = stocks_coll.find({"country": "UK" }).sort("ticker_symbol")
-    elif filter == "NASDAQ":
-        stocks = stocks_coll.find({"market_name": "NASDAQ" }).sort("ticker_symbol")
-    elif filter == "NYSE":
-        stocks = stocks_coll.find({"market_name": "NYSE" }).sort("ticker_symbol")
-    if "user" in session:
+    # Otherwise filter according to dropdown selection
+    elif filter in countries:
+        stocks = stocks_coll.find({"country": filter}).sort("ticker_symbol")
+    elif filter in stock_markets:
+        stocks = stocks_coll.find({"market_name": filter}).sort("ticker_symbol")
+    # If user logged in, identify their watched stocks
+    if 'user' in session:
         username = users_coll.find_one(
             {"username": session["user"]})
         watched_stocks = username["watched_stocks"]
@@ -109,19 +113,22 @@ def browse(filter):
                                 filter=filter)
     return render_template("browse.html",
                             stocks=stocks,
-                            filter=filter)    
+                            filter=filter)
 
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    """ This gets the search query from the search form """
     query = request.form.get("search")
     return redirect(url_for('results', query=query))
 
 
 @app.route("/results/<query>", methods=["GET", "POST"])
 def results(query):
+    """ This searches for the query in the stocks collection """
     query = query
     stocks = list(stocks_coll.find({"$text": {"$search": query}}))
+    # If logged in user, identify their watched stocks
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
@@ -135,6 +142,7 @@ def results(query):
 
 @app.route("/get_stock/<stock_id>")
 def get_stock(stock_id):
+    """ This gets the stock with the stock id """
     stock = stocks_coll.find_one({"_id": ObjectId(stock_id)})
     # Get current stock price from yfinance api
     # https://stackoverflow.com/questions/61104362/how-to-get-actual-stock-prices-with-yfinance
@@ -153,20 +161,23 @@ def get_stock(stock_id):
     price_change = round(price_change_raw, 2)
     # Create empty comments array and set number of comments to 0
     comments = []
-    commentsNo = 0
-    # Loops over the ObjectId's in the story_chains array in the story document
+    # Loops over the stock's comment Object Ids
     for comment in stock["comments"]:
+        # Finds the corresponding comments in the comments collection
         stock_comments = comments_coll.find_one({"_id": ObjectId(comment)})
-        # pushes those chain id's into the empty list)
+        # Pushes those comments into the empty comments array
         comments.append(stock_comments)
-        commentsNo += 1
-    if 'user' in session:
+    # Finds number of comments
+    commentsNo = len(comments)
+    # If user logged in, indentify if stock is in their watchlist
+    if "user" in session:
         result = users_coll.find_one({"username": session["user"],
                 "watched_stocks": ObjectId(stock_id)})
-        if result == None:
+        if result is None:
             watched_stock = False
         else:
             watched_stock = True
+    # If not logged in, watched stock set to False
     else:
         watched_stock = False
     return render_template("stock.html", stock=stock
@@ -180,49 +191,72 @@ def get_stock(stock_id):
 
 @app.route("/add_comment/<stock_id>", methods=["POST"])
 def add_comment(stock_id):
-    created_on = datetime.today().strftime('%d/%m/%Y, %H:%M:%S')
-    new_comment = {
-        "username": session["user"],
-        "date_created": created_on,
-        "comment": request.form.get("stock-comment")
-    }
-    insert_comment = comments_coll.insert_one(new_comment)
-    stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                            {"$push": {"comments":
-                            {"$each": [insert_comment.inserted_id],
-                            "$position": 0}}})
-    flash("Your comment was succesfully added")
-    return redirect(url_for("get_stock",
-                        stock_id=stock_id))
+    """ This adds a new comment to the stock """
+    if "user" in session:
+        # Gets the date and time comment created
+        created_on = datetime.today().strftime('%d/%m/%Y, %H:%M:%S')
+        new_comment = {
+            "username": session["user"],
+            "date_created": created_on,
+            "comment": request.form.get("stock-comment")
+        }
+        # Adds comment to comments collection
+        insert_comment = comments_coll.insert_one(new_comment)
+        # Adds comment id to the stock's comments array
+        stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                                {"$push": {"comments":
+                                {"$each": [insert_comment.inserted_id],
+                                "$position": 0}}})
+        flash("Your comment was succesfully added")
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
+    else:
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
 
 
 @app.route("/edit_comment/<stock_id>/<comment_id>", methods=["POST"])
 def edit_comment(stock_id, comment_id):
-    edited_comment = request.form.get("edited-comment")
-    comments_coll.update_one({"_id": ObjectId(comment_id)},
-                            {"$set": {"comment": edited_comment}})
-    flash("Your comment was succesfully edited")
-    return redirect(url_for("get_stock",
-                        stock_id=stock_id))
+    """ This edits a user's comment """
+    if "user" in session:
+        # Get the edited comment
+        edited_comment = request.form.get("edited-comment")
+        # Update the comment in the comments collection
+        comments_coll.update_one({"_id": ObjectId(comment_id)},
+                                {"$set": {"comment": edited_comment}})
+        flash("Your comment was succesfully edited")
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
+    else:
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
 
 
 @app.route("/delete_comment/<stock_id>/<comment_id>")
 def delete_comment(stock_id, comment_id):
-    comments_coll.remove({"_id": ObjectId(comment_id)})
-    stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                            {"$pull": {"comments": ObjectId(comment_id)}})
-    flash("Your comment was succesfully deleted")
-    return redirect(url_for("get_stock",
-                        stock_id=stock_id))
+    """ This deletes a user's comment """
+    if "user" in session:
+        # Remove the comment from the comments collection
+        comments_coll.remove({"_id": ObjectId(comment_id)})
+        # Remove the comments ObjectId from the stock's comments array
+        stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                                {"$pull": {"comments": ObjectId(comment_id)}})
+        flash("Your comment was succesfully deleted")
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
+    else:
+        return redirect(url_for("get_stock",
+                            stock_id=stock_id))
 
 
 @app.route("/watchlist/<username>", methods=["GET", "POST"])
 def watchlist(username):
-    username = users_coll.find_one(
-        {"username": session["user"]})
-    # Create an empty array for watched stocks
-    watched_stocks = []
-    if session["user"]:
+    """ This gets the user's watchlist """
+    if "user" in session:
+        username = users_coll.find_one(
+            {"username": session["user"]})
+        # Create an empty array for watched stocks
+        watched_stocks = []
         # For each of the user's watched_stocks, finds the corresponding
         # id in the stocks collection and populates into temporary chain
         for stock in username["watched_stocks"]:
@@ -234,42 +268,59 @@ def watchlist(username):
         return render_template("watchlist.html",
                                 username=username,
                                 watched_stocks=watched_stocks)
-    # Else return back to login
-    return redirect(url_for("login"))
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route("/remove_from_watchlist/<stock_id>/<url>/<filter>")
 def remove_from_watchlist(stock_id, url, filter):
-    username = users_coll.find_one(
-        {"username": session["user"]})
-
-    users_coll.find_one_and_update(
-        {"username": session["user"]},
-        {"$pull": {"watched_stocks": ObjectId(stock_id)}})
-    if url == "browse":
-        return redirect(url_for("browse", filter=filter))
+    """ This removes a stock from the user's watchlist """
+    if "user" in session:
+        username = users_coll.find_one(
+            {"username": session["user"]})
+        # Remove the stock id from the user's watched_stocks 
+        users_coll.find_one_and_update(
+            {"username": session["user"]},
+            {"$pull": {"watched_stocks": ObjectId(stock_id)}})
+        # If this was removed from browse page, redirect back to there
+        if url == "browse":
+            return redirect(url_for("browse", filter=filter))
+        # Otherwise redirect to the user's watchlist
+        else:
+            return redirect(url_for("watchlist", username=username))
     else:
-        return redirect(url_for("watchlist", username=username))
+        return redirect(url_for("index"))
 
 
 @app.route("/remove_from_watchlist_search/<stock_id>/<query>")
 def remove_from_watchlist_search(stock_id, query):
-    users_coll.find_one_and_update(
-        {"username": session["user"]},
-        {"$pull": {"watched_stocks": ObjectId(stock_id)}})
-    return redirect(url_for("results", query=query))
+    """ This removes a stock from the user's watchlist from the search page """
+    if "user" in session:
+        # Remove the stock id from the user's watched_stocks 
+        users_coll.find_one_and_update(
+            {"username": session["user"]},
+            {"$pull": {"watched_stocks": ObjectId(stock_id)}})
+        return redirect(url_for("results", query=query))
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route("/add_to_watchlist/<stock_id>/<url>/<filter>")
 def add_to_watchlist(stock_id, url, filter):
-    users_coll.find_one_and_update(
-        {"username": session["user"]},
-        {"$push": {"watched_stocks": ObjectId(stock_id)}})
-    if url == "browse":
-        return redirect(url_for("browse", filter=filter))
+    """ This adds a stock to the user's watchlist """
+    if "user" in session:
+        # Add the stock id to the user's watched stocks
+        users_coll.find_one_and_update(
+            {"username": session["user"]},
+            {"$push": {"watched_stocks": ObjectId(stock_id)}})
+         # If this was added from browse page, redirect back to there
+        if url == "browse":
+            return redirect(url_for("browse", filter=filter))
+        else:
+            return redirect(url_for("get_stock",
+                                stock_id=stock_id))
     else:
-        return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+        return redirect(url_for("index"))
 
 
 @app.route("/add_to_watchlist_search/<stock_id>/<query>")
