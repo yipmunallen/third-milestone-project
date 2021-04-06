@@ -89,6 +89,22 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/home/<username>")
+def home(username):
+    """ This gets stocks for browse page """
+    if "user" in session:
+        username = users_coll.find_one(
+            {"username": session["user"]})
+        latest_comments = list(comments_coll.find().sort("_id", -1).limit(20))
+        # comments = []
+        # for comment in latest_comments:
+        #     matching_stock = stocks_coll.find_one({"comments": ObjectId(comment["_id"])})
+        #     comments.append(matching_stock)
+        return render_template("home.html",
+                                latest_comments=latest_comments)
+    else:
+        return redirect(url_for("index"))
+
 @app.route("/browse/<filter>")
 def browse(filter):
     """ This gets stocks for browse page """
