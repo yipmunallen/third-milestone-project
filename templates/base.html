@@ -22,7 +22,7 @@
               <ul class="navbar-nav ml-auto">
                 {% if session.user %}
                     <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('feed', username=session['user']) }}">Feed</a>
+                      <a class="nav-link" href="{{ url_for('feed', username=session['user'], filter='all' ) }}">Feed</a>
                     </li>
                 {% endif %}
                     <li class="nav-item">
