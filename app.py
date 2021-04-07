@@ -89,17 +89,25 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/feed/<username>")
-def feed(username):
+@app.route("/feed/<username>/<filter>")
+def feed(username, filter):
     """ This gets stocks for browse page """
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
         latest_comments = comments_coll.find().sort("_id", -1).limit(50)
-        stocks = list(stocks_coll.find())
+        if filter == 'all':
+            stocks = list(stocks_coll.find())
+        else:
+            stocks = []
+            for stock in username["watched_stocks"]:
+                watched_stocks_list = stocks_coll.find_one({
+                    "_id": ObjectId(stock)})
+                stocks.append(watched_stocks_list)
         return render_template("feed.html",
                                 latest_comments=latest_comments,
-                                stocks=stocks)
+                                stocks=stocks, 
+                                filter=filter)
     else:
         return redirect(url_for("index"))
 
