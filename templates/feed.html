@@ -31,10 +31,11 @@
                                             <h1 class="title">Feed
                                             {% if filter == 'all' %}
                                                 <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='watchlist') }}">All</a> 
+                                                <hr/>
                                             {% else %}
                                                 <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='all') }}">Watchlist Only</a> 
                                             {% endif %}
-                                            <hr/></h1>                                                                  
+                                            </h1>                                                                  
                                         </div>                                       
                                     </div>
                                 </div>
