@@ -1,4 +1,4 @@
-# Quiz Website
+# Ticker
 
 <!-- ![alt text](https://github.com/yipmunallen/Second-Milestone-Project/blob/master/assets/images/quizscreenshot.png "Ticker Screenshot") -->
 
