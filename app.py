@@ -48,8 +48,8 @@ def signup():
 
         users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
-        flash("Registration Successful!")
-        # return redirect(url_for("watchlist", username=session["user"]))
+        flash("Welcome to Ticker, {}. This feed shows recent comments on stocks".format(request.form.get("username")))
+        return redirect(url_for("feed", username=session["user"]))
     return render_template("signup.html")
 
 
@@ -65,7 +65,7 @@ def login():
             if check_password_hash(
                 existing_user["password"], request.form.get("password")):
                     session["user"] = request.form.get("username").lower()
-                    # flash("Welcome, {}".format(request.form.get("username")))
+                    flash("Welcome, {}".format(request.form.get("username")))
                     return redirect(url_for(
                         "watchlist", username=session["user"]))
             else:
@@ -89,19 +89,17 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/home/<username>")
-def home(username):
+@app.route("/feed/<username>")
+def feed(username):
     """ This gets stocks for browse page """
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
-        latest_comments = list(comments_coll.find().sort("_id", -1).limit(20))
-        # comments = []
-        # for comment in latest_comments:
-        #     matching_stock = stocks_coll.find_one({"comments": ObjectId(comment["_id"])})
-        #     comments.append(matching_stock)
-        return render_template("home.html",
-                                latest_comments=latest_comments)
+        latest_comments = comments_coll.find().sort("_id", -1).limit(50)
+        stocks = list(stocks_coll.find())
+        return render_template("feed.html",
+                                latest_comments=latest_comments,
+                                stocks=stocks)
     else:
         return redirect(url_for("index"))
 
