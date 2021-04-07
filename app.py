@@ -49,7 +49,7 @@ def signup():
         users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
         flash("Welcome to Ticker, {}. This feed shows recent comments on stocks".format(request.form.get("username")))
-        return redirect(url_for("feed", username=session["user"]))
+        return redirect(url_for("feed", username=session["user"], filter='all'))
     return render_template("signup.html")
 
 
