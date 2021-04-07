@@ -67,7 +67,7 @@ def login():
                     session["user"] = request.form.get("username").lower()
                     flash("Welcome, {}".format(request.form.get("username")))
                     return redirect(url_for(
-                        "watchlist", username=session["user"]))
+                        "feed", username=session["user"]))
             else:
                 # invalid password match
                 flash("Incorrect Username and/or Password")
