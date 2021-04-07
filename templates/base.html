@@ -25,7 +25,7 @@
                     </li>
                 {% if session.user %}
                     <li class="nav-item">
-                      <a class="nav-link" href="{{ url_for('home', username=session['user']) }}">Home</a>
+                      <a class="nav-link" href="{{ url_for('feed', username=session['user']) }}">Home</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="{{ url_for('watchlist', username=session['user']) }}">Watchlist</a>
