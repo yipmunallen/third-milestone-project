@@ -1,3 +1,10 @@
+$(document).ready(function(){
+    // https://stackoverflow.com/questions/7643308/how-to-automatically-close-alerts-using-twitter-bootstrap
+    $(".comment-alerts").alert();
+    window.setTimeout(function() { $(".comment-alerts").alert('close'); }, 3000);
+    $('.dropdown-toggle').dropdown()
+});
+
 $(document).on('click',function(){
     $('.navbar-collapse').collapse('hide');
 });
@@ -18,11 +25,4 @@ $('#cancel-edit-comment').on('click',function(){
     $('#edit-comment').css('display','block');
     $('#delete-comment').css('display','block');
 
-});
-
-$(document).ready(function(){
-    // https://stackoverflow.com/questions/7643308/how-to-automatically-close-alerts-using-twitter-bootstrap
-    $(".comment-alerts").alert();
-    window.setTimeout(function() { $(".comment-alerts").alert('close'); }, 3000);
-    $('.dropdown-toggle').dropdown()
 });
