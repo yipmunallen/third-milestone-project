@@ -1,160 +1,146 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container main-content">
-    <div class="row">
-        <div class="col-12 card-margin">
-            <div class="card search-form">
-                <div class="card-body p-0">
-                    <form action="{{ url_for('search') }}" method="post" id="search-form">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="row no-gutters">
-                                    <div class="col-10 p-0">
-                                        <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search" required>
-                                    </div>
-                                    <div class="col-2 p-0">
-                                        <button type="submit" class="btn">
-                                            <i class="fa fa-search fa-2x"></i>
-                                        </button>
+    <section id="search-results">
+        <div class="container main-content">
+            <div class="row">
+                <div class="col-12 card-margin">
+                    <div class="card search-form">
+                        <div class="card-body p-0">
+                            <form action="{{ url_for('search') }}" method="post" id="search-form">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row no-gutters">
+                                            <div class="col-10 p-0">
+                                                <input type="text" placeholder="Search by name or ticker symbol..." class="form-control" id="search" name="search" required>
+                                            </div>
+                                            <div class="col-2 p-0">
+                                                <button type="submit" class="btn">
+                                                    <i class="fa fa-search fa-2x"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="dropdown">
-                <a class="btn buttons" href="{{ url_for('browse', filter='all') }}">Show All</a>
+            <div class="row">
+                <div class="col-12">
+                    <div class="dropdown">
+                        <a class="btn buttons" href="{{ url_for('browse', filter='all') }}">Show All</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card card-margin">
-                <div class="card-body">
-                    <div class="row search-body">
-                        <div class="col-lg-12">
-                            <div class="search-result">
-                                <div class="browse-header">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h1 class="title">RESULTS - "{{ query }}"</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="browse-body">
-                                    {% if stocks|length > 0 %}
-                                        <div class="table-responsive table-hover table-margin-top">
-                                            <table class="table table-content">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col"></th>
-                                                    <th scope="col">Name</th>
-                                                    <th scope="col">Market</th>
-                                                    <th scope="col">Sector</th>
-                                                    <th scope="col"></th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for stock in stocks %}
-                                                        <tr>
-                                                            <td>
-                                                                <div class="stock-icon">
-                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                        <img src= "{{ stock.icon_url }}" alt="icon">
-                                                                    </a>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="stock-name">
-                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                        <h2>{{ stock.ticker_symbol }}</h2>
-                                                                        <h4>{{ stock.company_name }}</h4>
-                                                                    </a>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="stock-market-name">
-                                                                    <h5>{{ stock.market_name }}</h5>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="stock-sector">
-                                                                    <h5>{{ stock.sector }}</h5>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                {% if session.user %}
-                                                                    {% if stock._id in watched_stocks %}
-                                                                        <div class="stock-favourite">
-                                                                            <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
-                                                                                <i class="fas fa-check-square fa-2x"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                    {% else %}
-                                                                        <div class="stock-not-favourite">
-                                                                            <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
-                                                                                <i class="far fa-plus-square fa-2x"></i>
-                                                                            </a>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                {% else %}
-                                                                <div class="stock-favourite">
-                                                                    <button type="button" class="buttonToLink" data-toggle="modal" data-target="#ModalCenter">
-                                                                        <i class="far fa-plus-square fa-2x"></i>
-                                                                    </button>
-                                                                    <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                                                                      <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                        <div class="modal-content">
-                                                                          <div class="modal-header text-center">
-                                                                            <h3 class="modal-title w-100" id="ModalLongTitle">Please log in or sign up to add to watchlist</h3>
-                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                              <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                          </div>
-                                                                          <div class="modal-body modal-buttons">                                                                        
-                                                                            <a class="btn buttons" href="{{ url_for('login') }}">Log In</a>
-                                                                            <a class="btn buttons" href="{{ url_for('signup') }}">Sign Up</a>
-                                                                          </div>
-                                                                          <div class="modal-footer">
-                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                          </div>
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
-                                                                </div>
-                                                                {% endif %}
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody> 
-                                            </table>
-                                        </div>
-                                    {% else %}
-                                        <hr/>
-                                        <div class="empty-watchlist text-center">
-                                            <h2>No results found</h2>
-                                        </div>                                    
-                                    {% endif %}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-margin">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h1 class="title">RESULTS - "{{ query }}"</h1>
                                 </div>
                             </div>
+                            {% if stocks|length > 0 %}
+                                <div class="table-responsive table-hover table-margin-top">
+                                    <table class="table table-content">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Name</th>
+                                                <th class="table-collapsible">Market</th>
+                                                <th class="table-collapsible">Sector</th>
+                                                <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for stock in stocks %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="stock-icon">
+                                                            <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                <img src= "{{ stock.icon_url }}" alt="icon">
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="stock-name">
+                                                            <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                <h2>{{ stock.ticker_symbol }}</h2>
+                                                                <h4>{{ stock.company_name }}</h4>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="stock-market-name table-collapsible">
+                                                            <h5>{{ stock.market_name }}</h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="stock-sector table-collapsible">
+                                                            <h5>{{ stock.sector }}</h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {% if session.user %}
+                                                            {% if stock._id in watched_stocks %}
+                                                                <div class="stock-favourite">
+                                                                    <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
+                                                                        <i class="fas fa-check-square fa-2x"></i>
+                                                                    </a>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="stock-not-favourite">
+                                                                    <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='search', filter='none', query=query) }}">
+                                                                        <i class="far fa-plus-square fa-2x"></i>
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% else %}
+                                                        <div class="stock-favourite">
+                                                            <button type="button" class="buttonToLink" data-toggle="modal" data-target="#ModalCenter">
+                                                                <i class="far fa-plus-square fa-2x"></i>
+                                                            </button>
+                                                            <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header text-center">
+                                                                            <h3 class="modal-title w-100" id="ModalLongTitle">Please log in or sign up to add to watchlist</h3>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body modal-buttons">                                                                        
+                                                                            <a class="btn buttons" href="{{ url_for('login') }}">Log In</a>
+                                                                            <a class="btn buttons" href="{{ url_for('signup') }}">Sign Up</a>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody> 
+                                    </table>
+                                </div>
+                            {% else %}
+                                <hr/>
+                                <div class="empty-watchlist text-center">
+                                    <h2>No results found</h2>
+                                </div>                                    
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
  
 {% endblock %}
-
-
-                                         
-
-
-
