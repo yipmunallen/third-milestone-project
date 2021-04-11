@@ -48,7 +48,8 @@ def signup():
 
         users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
-        flash("Welcome to Ticker, {}. This feed shows recent comments on stocks".format(request.form.get("username")))
+        flash("Welcome to Ticker, {}. This feed shows recent comments on stocks"
+            .format(request.form.get("username")))
         return redirect(url_for("feed", username=session["user"], filter='all'))
     return render_template("signup.html")
 
@@ -117,7 +118,7 @@ def browse(filter):
     countries = ['USA', 'UK']
     stock_markets = ['NASDAQ', 'NYSE', 'LSE']
     # If filter is all, find all stocks
-    if filter == "ALL":
+    if filter == "all":
         stocks = stocks_coll.find().sort("ticker_symbol")
     # Otherwise filter according to dropdown selection
     elif filter in countries:
@@ -336,6 +337,11 @@ def add_to_watchlist(stock_id, url, filter, query):
     else:
         return redirect(url_for("index"))
 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """ This handles 404 errors """
+    return render_template("404.html")
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
