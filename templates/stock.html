@@ -174,7 +174,7 @@
                                             <textarea class="form-control comment-input" name="edited-comment" rows="3" required>{{ comment.comment }}</textarea>
                                         </div>
                                         <button type="submit" class="btn submit-button">Submit</button>
-                                        <button type="button" class="btn cancel-button cancel-edit-comment" id="cancel-edit-comment">Cancel</button>
+                                        <button type="button" class="btn cancel-button cancel-edit-comment">Cancel</button>
                                     </form>
                                     {% if session.user|lower == comment.username|lower %}
                                         <a href="{{ url_for('delete_comment', stock_id=stock._id, comment_id=comment._id) }}" class="delete-comment" id="delete-comment-{{ comment._id }}">Delete</a>
