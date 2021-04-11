@@ -41,7 +41,7 @@ The live project can be viewed [here](https://third-milestone-project-ticker.her
 ### Users Stories
 As a user I want to:
 
-1. Browse available stocks
+1. Easily browse available stocks
 1. Easily search for stocks that I am interested in
 1. Be able to comment on stocks
 1. Be able to edit comments I have submitted
@@ -55,43 +55,43 @@ As a user I want to:
 
 - #### Wireframes
 
-  - [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/homewireframe.png)
-  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/ruleswireframe.png)
-  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/ruleswireframe.png)
-  - [Log In / Sign Up](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/settingswireframe.png)
-  - [Feed](https://github.com/yipmunallen/Second-Milestone-Project/blob/master/assets/images/quizwireframe.png)
-  - [Watchlist](https://github.com/yipmunallen/Second-Milestone-Project/blob/master/assets/images/scorewireframe.png)
+  - [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Log In / Sign Up](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
 
 - #### Final Pages 
 
-  -  [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/homepage.png)
+  -  [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
 
-  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/rulespage.png) -
+  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/browsepagescreenshot.png) -
 Shows list of stocks and includes basic information on each stock. Logged in users can see whether the stock is in their watchlist or not. There is a searchbar at the top as well as a filter that users can use to refine their view.
 
-  - [Results](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/rulespage.png) -
+  - [Results](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/resultspagescreenshot.png) -
 Shows results of user's stock search 
 
-  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/settingspage.png) -
+  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/stockpagescreenshot.png) -
 This is an individual stock page. It shows in depth stock information including current price, and price change / percentage change from previous day close. There is a comments section at the bottom of the page.
 
-  - [Log In](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/quizpage.png) -
+  - [Log In](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/loginpagescreenshot.png) -
 Users can log in on this page
 
-  - [Log In](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/quizpage.png) -
+  - [Log In](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/signuppagescreenshot.png) -
 Users can sign up on this page
 
-  - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/scorepage.png) -
+  - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/feedpagescreenshot.png) -
 This shows the most recent 50 comments either across all stocks, or just on the user's watchlist depending on which filter they choose
 
-  - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/feedbackpage.png) -
+  - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/watchlistpagescreenshot.png) -
 Contains all the user's watched stocks
 
 - #### Data Structure
 
 This site uses [__MongoDB__](https://www.mongodb.com//). It's database contains 3 collections: users, stocks and comments. Their structures are as follows:
 
-[alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/readme/datastructure.png "Ticker Data Structure")
+[alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/datastructure.png "Ticker Data Structure")
 
 Registered users are added to the users collection. When they create a new comment, a new document is added to the comments collection, with that comment id added to the comments array of the corresponding stock.
 
@@ -160,16 +160,29 @@ In addition:
 
 ### User Stories
 
-1. Browse available stocks
-    1. 
-    2.
+1. Easily browse available stocks
+    1. The browse page is accessible from the navbar at all times to both non logged in and logged in users
+    2. A search bar has been added 
+    3. 
 1. Easily search for stocks that I am interested in
 1. Be able to comment on stocks
+    1. A comment form is unavailable to non logged in users, with a prompt to sign up or log in
+    2. The comment form is avaible to logged in users. 
 1. Be able to edit comments I have submitted
+    1. The edit comment button is only shown if the logged in user is the one that submitted the comment
+    2. Once the edit button is clicked, a form opens up allowing the user to either edit their comment, or cancel the form
+    3. Once the comment is submitted, the comment in the comments collection is updated
 1. Be able to delete comments I have submitted
+    1. The delete comment button is only shown if the logged in user is the one that submitted the comment
+    2. Once the delete button is pressed, the comment is removed from the comments collection as well as it's id removed from the stock's comments array
+    3. Confirmation is given once a comment is deleted
 1. Build my own watchlist so that I can have easy access to my favourite stocks
+    1. Watchlist is available to logged in users only
+    1. Once a stock is added to a user's watchlist either on the browse or individual stock page, the stock will appear on their watchlist and the icon will change indicating that the stock is now in their list.
 1. Be able to remove stocks from my watchlist
+    1. 
 1. Be able to see comments across all stocks
+    1. The most recent 50 stocks can be viewed on the "Feed" page for logged in users
 
 ### Additional Functionality
 
