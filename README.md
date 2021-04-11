@@ -93,7 +93,9 @@ This site uses [__MongoDB__](https://www.mongodb.com//). It's database contains 
 
 ![alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/datastructure.png "Ticker Data Structure")
 
-Registered users are added to the users collection. When they create a new comment, a new document is added to the comments collection, with that comment id added to the comments array of the corresponding stock.
+- When a user signs up, a new document is added to the users collection. It contains an id, username, password, and empty watched stocks array
+- When a user adds a new comment, a new document is added to the comments collection. It contains an id, their username, the date created and the comment. That comment id is then added to the corresponding stock's comment array in the stocks collection.
+- When a user adds a stock to their watchlist, the id of the stock is added to the user's watched stocks array in the users collection
 
 -   #### Colour Scheme
     -   The main colours used for the site are centered around blue and white:
