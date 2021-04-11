@@ -298,21 +298,22 @@ def delete_comment(stock_id, comment_id):
                             stock_id=stock_id))
         # If valid, remove the comment from the comments collection
         else:
-            comments_coll.remove({"_id": ObjectId(comment_id)})
-            # Remove the comments ObjectId from the stock's comments array
-            stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                                   {"$pull":
-                                       {"comments": ObjectId(comment_id)}
-                                    })
-            flash("Your comment was succesfully deleted")
-            return redirect(url_for("get_stock",
-                                    stock_id=stock_id))
+            if session["user"]:
+                comments_coll.remove({"_id": ObjectId(comment_id)})
+                # Remove the comments ObjectId from the stock's comments array
+                stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                                       {"$pull":
+                                           {"comments": ObjectId(comment_id)}
+                                        })
+                flash("Your comment was succesfully deleted")
+                return redirect(url_for("get_stock",
+                                        stock_id=stock_id))
     else:
         return redirect(url_for("get_stock",
                                 stock_id=stock_id))
 
 
-@app.route("/watchlist/<username>", methods=["GET", "POST"])
+@app.route("/watchlist/<username>")
 def watchlist(username):
     """ This gets the user's watchlist """
     if "user" in session:
@@ -328,9 +329,10 @@ def watchlist(username):
             watched_stocks.append(watched_stocks_list)
         # https://therenegadecoder.com/code/how-to-sort-a-list-of-dictionaries-in-python/
         watched_stocks.sort(key=lambda item: item.get("ticker_symbol"))
-        return render_template("watchlist.html",
-                               username=username,
-                               watched_stocks=watched_stocks)
+        if session["user"]:
+            return render_template("watchlist.html",
+                                   username=username,
+                                   watched_stocks=watched_stocks)
     else:
         return redirect(url_for("index"))
 
@@ -340,7 +342,7 @@ def remove_from_watchlist(stock_id, url, filter, query):
     """ This removes a stock from the user's watchlist """
     if "user" in session:
         username = users_coll.find_one(
-            {"username": session["user"]})
+            {"username": session["user"]})["username"]
         # Remove the stock id from the user's watched_stocks
         users_coll.find_one_and_update(
             {"username": session["user"]},
