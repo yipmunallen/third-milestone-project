@@ -350,8 +350,10 @@ def remove_from_watchlist(stock_id, url, filter, query):
         # If this was removed from browse page, redirect back to there
         if url == "browse":
             return redirect(url_for("browse", filter=filter))
-        if url == "search":
+        elif url == "search":
             return redirect(url_for("results", query=query))
+        elif url == "stock":
+            return redirect(url_for("get_stock", stock_id=stock_id))
         # Otherwise redirect to the user's watchlist
         else:
             return redirect(url_for("watchlist", username=username))
@@ -371,7 +373,7 @@ def add_to_watchlist(stock_id, url, filter, query):
         if url == "browse":
             return redirect(url_for("browse", filter=filter))
         # If this was added from search page, redirect back to there
-        if url == "search":
+        elif url == "search":
             return redirect(url_for("results", query=query))
         else:
             return redirect(url_for("get_stock",
