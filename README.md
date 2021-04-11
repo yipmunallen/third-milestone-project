@@ -1,6 +1,6 @@
 # Ticker
 
-![alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/readme/websitemockup.png "Ticker Screenshot")
+![alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/websitemockup.png "Ticker Screenshot")
 
 This is a full-stack site, built using HTML, CSS, JavaScript, Python, Flask framework and MongoDB. It allows users to browse and comment on stocks, as well as build their own watchlists.
 
