@@ -23,6 +23,7 @@ users_coll = mongo.db.users
 stocks_coll = mongo.db.stocks
 comments_coll = mongo.db.comments
 
+
 @app.route("/")
 @app.route("/index")
 def index():
@@ -48,9 +49,11 @@ def signup():
 
         users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
-        flash("Welcome to Ticker, {}. This feed shows recent comments on stocks"
-            .format(request.form.get("username")))
-        return redirect(url_for("feed", username=session["user"], filter='all'))
+        flash("Welcome to Ticker, {}."
+              "This feed shows recent comments on stocks"
+              .format(request.form.get("username")))
+        return redirect(url_for("feed", username=session["user"],
+                                filter='all'))
     if 'user' in session:
         flash("You already have an account!")
         return redirect(url_for(
@@ -68,11 +71,12 @@ def login():
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(
-                existing_user["password"], request.form.get("password")):
-                    session["user"] = request.form.get("username").lower()
-                    flash("Welcome, {}".format(request.form.get("username")))
-                    return redirect(url_for(
-                        "feed", username=session["user"], filter='all'))
+                existing_user["password"],
+                    request.form.get("password")):
+                session["user"] = request.form.get("username").lower()
+                flash("Welcome, {}".format(request.form.get("username")))
+                return redirect(url_for(
+                    "feed", username=session["user"], filter='all'))
             else:
                 # invalid password match
                 flash("Incorrect Username and/or Password")
@@ -114,9 +118,9 @@ def feed(username, filter):
                     "_id": ObjectId(stock)})
                 stocks.append(watched_stocks_list)
         return render_template("feed.html",
-                                latest_comments=latest_comments,
-                                stocks=stocks, 
-                                filter=filter)
+                               latest_comments=latest_comments,
+                               stocks=stocks,
+                               filter=filter)
     else:
         return redirect(url_for("index"))
 
@@ -133,19 +137,21 @@ def browse(filter):
     elif filter in countries:
         stocks = stocks_coll.find({"country": filter}).sort("ticker_symbol")
     elif filter in stock_markets:
-        stocks = stocks_coll.find({"market_name": filter}).sort("ticker_symbol")
+        stocks = stocks_coll.find({
+                "market_name": filter}).sort("ticker_symbol")
     # If user logged in, identify their watched stocks
     if 'user' in session:
         username = users_coll.find_one(
             {"username": session["user"]})
         watched_stocks = username["watched_stocks"]
-        return render_template("browse.html", 
-                                stocks=stocks, 
-                                watched_stocks=watched_stocks,
-                                filter=filter)
-    return render_template("browse.html",
-                            stocks=stocks,
-                            filter=filter)
+        return render_template("browse.html",
+                               stocks=stocks,
+                               watched_stocks=watched_stocks,
+                               filter=filter)
+    else:
+        return render_template("browse.html",
+                               stocks=stocks,
+                               filter=filter)
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -165,10 +171,10 @@ def results(query):
         username = users_coll.find_one(
             {"username": session["user"]})
         watched_stocks = username["watched_stocks"]
-        return render_template("results.html", 
-                                query=query, 
-                                watched_stocks=watched_stocks,
-                                stocks=stocks)
+        return render_template("results.html",
+                               query=query,
+                               watched_stocks=watched_stocks,
+                               stocks=stocks)
     return render_template("results.html", query=query, stocks=stocks)
 
 
@@ -187,10 +193,10 @@ def get_stock(stock_id):
     yesterday_data_raw = yesterday_data['Close'][0]
     # Calculate change in price and percentage change
     # between yesterday close and today
-    percentage_change_raw = 100*(stock_price_raw - yesterday_data_raw)/yesterday_data_raw
-    percentage_change = round(percentage_change_raw, 2)
     price_change_raw = stock_price_raw - yesterday_data_raw
     price_change = round(price_change_raw, 2)
+    percentage_change_raw = 100*(price_change_raw)/yesterday_data_raw
+    percentage_change = round(percentage_change_raw, 2)
     # Create empty comments array and set number of comments to 0
     comments = []
     # Loops over the stock's comment Object Ids
@@ -204,7 +210,7 @@ def get_stock(stock_id):
     # If user logged in, indentify if stock is in their watchlist
     if "user" in session:
         result = users_coll.find_one({"username": session["user"],
-                "watched_stocks": ObjectId(stock_id)})
+                                      "watched_stocks": ObjectId(stock_id)})
         if result is None:
             watched_stock = False
         else:
@@ -212,13 +218,14 @@ def get_stock(stock_id):
     # If not logged in, watched stock set to False
     else:
         watched_stock = False
-    return render_template("stock.html", stock=stock
-                                        , stock_price=stock_price
-                                        , percentage_change=percentage_change
-                                        , price_change=price_change
-                                        , comments=comments
-                                        , comments_no=commentsNo
-                                        , watched_stock=watched_stock)
+    return render_template("stock.html",
+                           stock=stock,
+                           stock_price=stock_price,
+                           percentage_change=percentage_change,
+                           price_change=price_change,
+                           comments=comments,
+                           comments_no=commentsNo,
+                           watched_stock=watched_stock)
 
 
 @app.route("/add_comment/<stock_id>", methods=["POST"])
@@ -236,15 +243,20 @@ def add_comment(stock_id):
         insert_comment = comments_coll.insert_one(new_comment)
         # Adds comment id to the stock's comments array
         stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                                {"$push": {"comments":
-                                {"$each": [insert_comment.inserted_id],
-                                "$position": 0}}})
+                               {"$push":
+                                   {"comments":
+                                       {"$each": [insert_comment.inserted_id],
+                                        "$position": 0
+                                        }
+                                    }
+                                }
+                               )
         flash("Your comment was succesfully added")
         return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+                                stock_id=stock_id))
     else:
         return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+                                stock_id=stock_id))
 
 
 @app.route("/edit_comment/<stock_id>/<comment_id>", methods=["POST"])
@@ -255,21 +267,23 @@ def edit_comment(stock_id, comment_id):
         edited_comment = request.form.get("edited-comment")
         # Update the comment in the comments collection
         comments_coll.update_one({"_id": ObjectId(comment_id)},
-                                {"$set": {"comment": edited_comment}})
+                                 {"$set":
+                                     {"comment": edited_comment}
+                                  })
         flash("Your comment was succesfully edited")
         return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+                                stock_id=stock_id))
     else:
         return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+                                stock_id=stock_id))
 
 
 @app.route("/delete_comment/<stock_id>/<comment_id>")
 def delete_comment(stock_id, comment_id):
     """ This deletes a user's comment """
     if "user" in session:
-        valid_comment = comments_coll.find_one({"_id": ObjectId(comment_id)
-                        , "username": session["user"]})
+        valid_comment = comments_coll.find_one({"_id": ObjectId(comment_id),
+                                                "username": session["user"]})
         # Check it is the user's comment. If not return to get stock
         if valid_comment is None:
             return redirect(url_for("get_stock",
@@ -279,13 +293,15 @@ def delete_comment(stock_id, comment_id):
             comments_coll.remove({"_id": ObjectId(comment_id)})
             # Remove the comments ObjectId from the stock's comments array
             stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                                    {"$pull": {"comments": ObjectId(comment_id)}})
+                                   {"$pull":
+                                       {"comments": ObjectId(comment_id)}
+                                    })
             flash("Your comment was succesfully deleted")
             return redirect(url_for("get_stock",
-                                stock_id=stock_id))
+                                    stock_id=stock_id))
     else:
         return redirect(url_for("get_stock",
-                            stock_id=stock_id))
+                                stock_id=stock_id))
 
 
 @app.route("/watchlist/<username>", methods=["GET", "POST"])
@@ -305,8 +321,8 @@ def watchlist(username):
         # https://therenegadecoder.com/code/how-to-sort-a-list-of-dictionaries-in-python/
         watched_stocks.sort(key=lambda item: item.get("ticker_symbol"))
         return render_template("watchlist.html",
-                                username=username,
-                                watched_stocks=watched_stocks)
+                               username=username,
+                               watched_stocks=watched_stocks)
     else:
         return redirect(url_for("index"))
 
@@ -317,7 +333,7 @@ def remove_from_watchlist(stock_id, url, filter, query):
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
-        # Remove the stock id from the user's watched_stocks 
+        # Remove the stock id from the user's watched_stocks
         users_coll.find_one_and_update(
             {"username": session["user"]},
             {"$pull": {"watched_stocks": ObjectId(stock_id)}})
@@ -349,7 +365,7 @@ def add_to_watchlist(stock_id, url, filter, query):
             return redirect(url_for("results", query=query))
         else:
             return redirect(url_for("get_stock",
-                                stock_id=stock_id))
+                                    stock_id=stock_id))
     else:
         return redirect(url_for("index"))
 
@@ -364,6 +380,7 @@ def page_not_found(e):
 def method_not_allowed(error):
     """ This renders 404 error page """
     return render_template("405.html")
+
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
