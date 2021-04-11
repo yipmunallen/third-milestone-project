@@ -25,7 +25,6 @@ The live project can be viewed [here](https://third-milestone-project-ticker.her
    1. [User stories](#user-stories)
    1. [Additional Functionality](#Additional-Functionality)
    1. [Compatibility](#compatibility)
-   1. [Bugs](#bugs)
    1. [Validation](#validation)
 1. [Deployment](#deployment)
 1. [Credits](#credits)
