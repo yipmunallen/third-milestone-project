@@ -1,11 +1,12 @@
 # Ticker
 
-<!-- ![alt text](https://github.com/yipmunallen/Second-Milestone-Project/blob/master/assets/images/quizscreenshot.png "Ticker Screenshot") -->
+![alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/assets/images/readme/websitemockup.png "Ticker Screenshot")
 
 This is a full-stack site, built using HTML, CSS, JavaScript, Python, Flask framework and MongoDB. It allows users to browse and comment on stocks, as well as build their own watchlists.
 
 Disclaimer: This website is for educational purposes only. Only a selection of stocks have been added in order to demonstrate functionality. Stocks comments are not financial advise.
-<!-- The live project can be viewed [here](https://yipmunallen.github.io/third-milestone-project/). -->
+
+The live project can be viewed [here](https://third-milestone-project-ticker.herokuapp.com).
 
 ## Table of Contents
 1. [Ux](#ux)
