@@ -244,8 +244,14 @@ In order to clone this project:
     1. Signup or login to MongoDB
     2. Create a cluster as well as a database.
     3. Create three collections within your database following this [data structure](#data-structure)
-1. Add an env.py file to your workspace to include your environment variables. It will need to contain the following varibles:
+1. Add an env.py file to your workspace containing the following variables:
     ``` os.environ["PORT"] = "5000" os.environ["SECRET_KEY"] = "YOUR_SECRET_KEY" os.environ["DEBUG"] = "True" os.environ["MONGO_URI"] = "YOUR_MONGODB_URI" os.environ["MONGO_DBNAME"]= "DATABASE_NAME" ```
+1. In order to deploy to Heroku:
+    1. Log in or sign up to [__Heroku__](https://heroku.com/)
+    2. Create a new app
+    3. Connect the app to github
+    4. Go to the app's settings and create conig vars based on variable in env.py
+    5. Once you have pushed all your files to Github, navigate to the deploy tab, "enable automatic deploys" and deploy branch to Heroku
 1. The Project can be run from the local using the following command in the gitpod CLI ```python3 app.py```
 
 ## Credits
