@@ -51,6 +51,10 @@ def signup():
         flash("Welcome to Ticker, {}. This feed shows recent comments on stocks"
             .format(request.form.get("username")))
         return redirect(url_for("feed", username=session["user"], filter='all'))
+    if 'user' in session:
+        flash("You already have an account!")
+        return redirect(url_for(
+                        "feed", username=session["user"], filter='all'))
     return render_template("signup.html")
 
 
@@ -78,16 +82,20 @@ def login():
             # username doesn't exist
             flash("Incorrect Username and/or Password")
             return redirect(url_for("login"))
-
-    return render_template("login.html")
+    if 'user' in session:
+        flash("You are already logged in!")
+        return redirect(url_for(
+                        "feed", username=session["user"], filter='all'))
+    else:
+        return render_template("login.html")
 
 
 @app.route("/logout")
 def logout():
     """ This clears the session """
-    flash("You have been logged out")
     session.clear()
-    return redirect(url_for("index"))
+    flash("You have been logged out")
+    return redirect(url_for("login"))
 
 
 @app.route("/feed/<username>/<filter>")
@@ -111,6 +119,7 @@ def feed(username, filter):
                                 filter=filter)
     else:
         return redirect(url_for("index"))
+
 
 @app.route("/browse/<filter>")
 def browse(filter):
@@ -259,14 +268,21 @@ def edit_comment(stock_id, comment_id):
 def delete_comment(stock_id, comment_id):
     """ This deletes a user's comment """
     if "user" in session:
-        # Remove the comment from the comments collection
-        comments_coll.remove({"_id": ObjectId(comment_id)})
-        # Remove the comments ObjectId from the stock's comments array
-        stocks_coll.update_one({"_id": ObjectId(stock_id)},
-                                {"$pull": {"comments": ObjectId(comment_id)}})
-        flash("Your comment was succesfully deleted")
-        return redirect(url_for("get_stock",
+        valid_comment = comments_coll.find_one({"_id": ObjectId(comment_id)
+                        , "username": session["user"]})
+        # Check it is the user's comment. If not return to get stock
+        if valid_comment is None:
+            return redirect(url_for("get_stock",
                             stock_id=stock_id))
+        # If valid, remove the comment from the comments collection
+        else:
+            comments_coll.remove({"_id": ObjectId(comment_id)})
+            # Remove the comments ObjectId from the stock's comments array
+            stocks_coll.update_one({"_id": ObjectId(stock_id)},
+                                    {"$pull": {"comments": ObjectId(comment_id)}})
+            flash("Your comment was succesfully deleted")
+            return redirect(url_for("get_stock",
+                                stock_id=stock_id))
     else:
         return redirect(url_for("get_stock",
                             stock_id=stock_id))
@@ -340,8 +356,14 @@ def add_to_watchlist(stock_id, url, filter, query):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    """ This handles 404 errors """
+    """ This renders 404 error page """
     return render_template("404.html")
+
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    """ This renders 404 error page """
+    return render_template("405.html")
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
