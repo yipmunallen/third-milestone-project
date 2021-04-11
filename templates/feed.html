@@ -27,12 +27,12 @@
                                 <div class="col-12">
                                     <h1 class="title">Feed
                                         {% if filter == 'all' %}
-                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='watchlist') }}">All</a> 
-                                            <hr/>
+                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='watchlist') }}">All</a>                                          
                                         {% else %}
                                             <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='all') }}">Watchlist Only</a> 
                                         {% endif %}
-                                    </h1>                                                                  
+                                    </h1> 
+                                    <hr/>                                                                 
                                 </div>                                       
                             </div>
                             {% if stocks|length > 0 %}                        
@@ -56,7 +56,7 @@
                                                                         <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
                                                                             <h4>{{ stock.ticker_symbol }}</h4>
                                                                             <h4>{{ comment.comment }}</h4>
-                                                                            <h6>{{ comment.username }}&nbsp{{ comment.date_created}}</h6>
+                                                                            <h6>{{ comment.username }}&nbsp;{{ comment.date_created}}</h6>
                                                                         </a>
                                                                     </div>
                                                                 </td> 
