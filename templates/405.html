@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+   <section id="error">
+        <div id="hero-image">
+            <div class="container h-100">
+                <div class="row align-items-center h-100">
+                    <div class="col-md-6 col-12 mx-auto">
+                        <div class="jumbotron" id="error-text">
+                            <h2>Oops!</h2>
+                            <h3>Method not allowed</h3>
+                            <a class="btn form-button" href="{{ url_for('index') }}">HOME</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
