@@ -139,7 +139,7 @@
                                 {% if session.user %}
                                     <form class="text-right" method="POST" action="{{ url_for('add_comment', stock_id=stock._id) }}">
                                         <div class="form-group">
-                                            <textarea class="form-control comment-input" name="stock-comment" rows="3" placeholder="Add comment..."></textarea>
+                                            <textarea class="form-control comment-input" name="stock-comment" rows="3" placeholder="Add comment..." required></textarea>
                                         </div>
                                         <button type="submit" class="btn submit-button">Submit</button>
                                     </form>
