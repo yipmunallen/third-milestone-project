@@ -1,195 +1,192 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container main-content">  
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="row">
-                    <div class="col-12">
-                        <div class="alert comment-alerts flash-messages alert-dismissible fade out show" role="alert">
-                            {{ message }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+    <section id="stock">
+        <div class="container main-content">  
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert comment-alerts flash-messages alert-dismissible fade out show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}        
+                {% endif %}
+            {% endwith %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-margin">
+                        <div class="card-body">
+                            <div class="row search-body">
+                                <div class="col-12 stock-info">
+                                    <div class="row stock-header align-items-center">
+                                        <div class="col-4 col-sm-3 col-md-2 stock-image">
+                                            <img src= "{{ stock.icon_url }}" alt="icon">
+                                        </div>
+                                        <div class="col-4 col-sm-3 col-md-4 stock-name">
+                                            <h1>{{ stock.company_name }}</h1>
+                                            <h3>{{ stock.ticker_symbol }}</h3>
+                                            <div class="stock-price-mobile">
+                                                {% if price_change < 0.00 %}
+                                                    {{stock_price}}<span class="color-red">&nbsp{{price_change}}({{percentage_change}}%)</span>
+                                                {% else %}
+                                                    <h3>{{stock_price}}</h3><h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
+                                                {% endif %}
+                                            </div>
+                                            {% if session.user %}
+                                                {% if watched_stock == true %}
+                                                <div class="stock-watchlist-mobile">
+                                                    <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button">
+                                                        <i class="fas fa-check-square fa-2x stock-watchlist-button"></i>
+                                                        &nbsp Watched stock
+                                                    </a>
+                                                </div>     
+                                                {% else %}                   
+                                                <div class="stock-watchlist-mobile">
+                                                    <a href="{{ url_for('add_to_watchlist', stock_id=stock._id , url='stock', filter='none', query='none') }}" class="stock-page-button">
+                                                        <i class="far fa-plus-square fa-lg stock-watchlist-button"></i>
+                                                        &nbsp add to watchlist
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm-2 col-md-2 stock-price-desktop">
+                                            <h1>{{stock_price}}</h1>
+                                            {% if price_change < 0.00 %}
+                                                <h3 class="color-red">{{price_change}}({{percentage_change}}%)</h3>
+                                            {% else %}
+                                                <h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
+                                            {% endif %}
+                                        </div>
+                                        {% if session.user %}
+                                            {% if watched_stock == True %}
+                                            <div class="col-3 stock-watchlist-desktop">
+                                                <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button float-right">
+                                                    <i class="fas fa-check-square fa-2x stock-watchlist-button"></i>
+                                                    &nbsp Watched stock
+                                                </a>
+                                            </div>
+                                            {% else %}                                    
+                                            <div class="col-3 stock-watchlist-desktop">
+                                                <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button float-right">
+                                                    <i class="far fa-plus-square fa-2x stock-watchlist-button"></i>
+                                                    &nbsp add to watchlist
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="accordion company-details-accordian" id="accordionExample">
+                                        <div class="card">
+                                            <div class="card-header mb-0" id="headingOne">
+                                                <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    <h3>Company Details</h3>
+                                                </button>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                                <div class="card-body ">
+                                                    <table class="table table-borderless company-details-table">
+                                                      <tbody>
+                                                        <tr>
+                                                          <th>About</th>
+                                                          <td>{{ stock.company_details }}</td>
+                                                        </tr>                                              
+                                                        <tr>
+                                                          <th>Market Name</th>
+                                                          <td>{{ stock.market_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>Currency</th>
+                                                          <td>{{ stock.currency }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>Country</th>
+                                                          <td>{{ stock.country }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                          <th>Sector</th>
+                                                          <td>{{ stock.sector }}</td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}        
-        {% endif %}
-    {% endwith %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-margin">
-                <div class="card-body">
-                    <div class="row search-body">
-                        <div class="col-12 stock-info">
-                            <div class="row stock-header align-items-center">
-                                <div class="col-4 col-sm-3 col-md-2 stock-image">
-                                    <img src= "{{ stock.icon_url }}" alt="icon">
-                                </div>
-                                <div class="col-4 col-sm-3 col-md-4 stock-name">
-                                    <h1>{{ stock.company_name }}</h1>
-                                    <h3>{{ stock.ticker_symbol }}</h3>
-                                    <div class="stock-price-mobile">
-                                        {% if price_change < 0.00 %}
-                                            {{stock_price}}<span class="color-red">&nbsp{{price_change}}({{percentage_change}}%)</span>
-                                        {% else %}
-                                            <h3>{{stock_price}}</h3><h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
-                                        {% endif %}
+                    <div class="comment-section">
+                        <div class="row">
+                            <div class="col-12 comments-form">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="far fa-comments fa-3x"></i>
                                     </div>
-                                    {% if session.user %}
-                                        {% if watched_stock == true %}
-                                        <div class="stock-watchlist-mobile">
-                                            <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button">
-                                                <i class="fas fa-check-square fa-2x stock-watchlist-button"></i>
-                                                &nbsp Watched stock
-                                            </a>
-                                        </div>     
-                                        {% else %}                   
-                                        <div class="stock-watchlist-mobile">
-                                            <a href="{{ url_for('add_to_watchlist', stock_id=stock._id , url='stock', filter='none', query='none') }}" class="stock-page-button">
-                                                <i class="far fa-plus-square fa-lg stock-watchlist-button"></i>
-                                                &nbsp add to watchlist
-                                            </a>
-                                        </div>
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
-                                <div class="col-sm-2 col-md-2 stock-price-desktop">
-                                    <h1>{{stock_price}}</h1>
-                                    {% if price_change < 0.00 %}
-                                        <h3 class="color-red">{{price_change}}({{percentage_change}}%)</h3>
-                                    {% else %}
-                                        <h3 class="color-green">{{price_change}}({{percentage_change}}%)</h3>
-                                    {% endif %}
                                 </div>
                                 {% if session.user %}
-                                    {% if watched_stock == True %}
-                                    <div class="col-3 stock-watchlist-desktop">
-                                        <a href="{{ url_for('remove_from_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button float-right">
-                                            <i class="fas fa-check-square fa-2x stock-watchlist-button"></i>
-                                            &nbsp Watched stock
-                                        </a>
+                                    <form class="text-right" method="POST" action="{{ url_for('add_comment', stock_id=stock._id) }}">
+                                        <div class="form-group">
+                                            <textarea class="form-control comment-input" name="stock-comment" rows="3" placeholder="Add comment..."></textarea>
+                                        </div>
+                                        <button type="submit" class="btn submit-button">Submit</button>
+                                    </form>
+                                {% else %}
+                                    <div class="card">
+                                        <div class="card-body row">
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <h4>Please log in or sign up to leave a comment</h4>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-center">
+                                                <a class="btn buttons" href="{{ url_for('login') }}">Log In</a>
+                                                <a class="btn buttons" href="{{ url_for('signup') }}">Sign Up</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {% else %}                                    
-                                    <div class="col-3 stock-watchlist-desktop">
-                                        <a href="{{ url_for('add_to_watchlist', stock_id=stock._id, url='stock', filter='none', query='none') }}" class="stock-page-button float-right">
-                                            <i class="far fa-plus-square fa-2x stock-watchlist-button"></i>
-                                            &nbsp add to watchlist
-                                        </a>
-                                    </div>
-                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="accordion company-details-accordian" id="accordionExample">
-                                <div class="card">
-                                    <div class="card-header mb-0" id="headingOne">
-                                        <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            <h3>Company Details</h3>
-                                        </button>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                        <div class="card-body ">
-                                            <table class="table table-borderless company-details-table">
-                                              <tbody>
-                                                <tr>
-                                                  <th>About</th>
-                                                  <td>{{ stock.company_details }}</td>
-                                                </tr>                                              
-                                                <tr>
-                                                  <th>Market Name</th>
-                                                  <td>{{ stock.market_name }}</td>
-                                                </tr>
-                                                <tr>
-                                                  <th>Currency</th>
-                                                  <td>{{ stock.currency }}</td>
-                                                </tr>
-                                                <tr>
-                                                  <th>Country</th>
-                                                  <td>{{ stock.country }}</td>
-                                                </tr>
-                                                <tr>
-                                                  <th>Sector</th>
-                                                  <td>{{ stock.sector }}</td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
+                        <div class="row">
+                            <div class="col-12 comments-number">
+                                <h4>{{ comments_no }} Comments</h4><hr/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% for comment in comments %}
+                                <div class="col-12 comments-header">
+                                    <span id="comment-username">{{ comment.username }}</span> 
+                                    <span id="comment-time">{{ comment.date_created }}</span>
+                                    <p id="comment-body">{{ comment.comment }}</p>
+                                    <form class="text-right" id="edit-comment-form" method="POST" action="{{ url_for('edit_comment', stock_id=stock._id, comment_id=comment._id) }}">
+                                        <div class="form-group">
+                                            <textarea class="form-control comment-input" name="edited-comment" rows="3" required>{{ comment.comment }}</textarea>
                                         </div>
-                                    </div>
+                                        <button type="submit" class="btn submit-button">Submit</button>
+                                        <button type="button" class="btn cancel-button" id="cancel-edit-comment">Cancel</button>
+                                    </form>
+                                    {% if session.user|lower == comment.username|lower %}
+                                        <a href="{{ url_for('delete_comment', stock_id=stock._id, comment_id=comment._id) }}" id="delete-comment">Delete</a>
+                                        <p class="cursor-pointer" id="edit-comment">Edit</p>
+                                    {% endif %}
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="comment-section">
-                <div class="row">
-                    <div class="col-12 comments-form">
-                        <div class="card">
-                          <div class="card-header">
-                            <i class="far fa-comments fa-3x"></i>
-                          </div>
-                        </div>
-                        {% if session.user %}
-                            <form class="text-right" method="POST" action="{{ url_for('add_comment', stock_id=stock._id) }}">
-                                <div class="form-group">
-                                    <textarea class="form-control comment-input" name="stock-comment" rows="3" placeholder="Add comment..."></textarea>
-                                </div>
-                                <button type="submit" class="btn submit-button">Submit</button>
-                            </form>
-                        {% else %}
-                            <div class="card">
-                                <div class="card-body row">
-                                    <div class="col-12 d-flex justify-content-center">
-                                        <h4>Please log in or sign up to leave a comment</h4>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-center">
-                                        <a class="btn buttons" href="{{ url_for('login') }}">Log In</a>
-                                        <a class="btn buttons" href="{{ url_for('signup') }}">Sign Up</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 comments-number">
-                        <h4>{{ comments_no }} Comments</h4><hr/>
-                    </div>
-                </div>
-                <div class="row">
-                    {% for comment in comments %}
-                        <div class="col-12 comments-header">
-                            <span id="comment-username">{{ comment.username }}</span> 
-                            <span id="comment-time">{{ comment.date_created }}</span>
-                            <p id="comment-body">{{ comment.comment }}</p>
-                            <form class="text-right" id="edit-comment-form" method="POST" action="{{ url_for('edit_comment', stock_id=stock._id, comment_id=comment._id) }}">
-                                <div class="form-group">
-                                    <textarea class="form-control comment-input" name="edited-comment" rows="3" required>{{ comment.comment }}</textarea>
-                                </div>
-                                <button type="submit" class="btn submit-button">Submit</button>
-                                <button type="button" class="btn cancel-button" id="cancel-edit-comment">Cancel</button>
-                            </form>
-                            {% if session.user|lower == comment.username|lower %}
-                                <a href="{{ url_for('delete_comment', stock_id=stock._id, comment_id=comment._id) }}" id="delete-comment">Delete</a>
-                                <p class="cursor-pointer" id="edit-comment">Edit</p>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
-
-    </div>
-</div>
-
-
+    </section>
 
 {% endblock %}
-
-
