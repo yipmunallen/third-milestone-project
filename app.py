@@ -132,7 +132,7 @@ def browse(filter):
     # Otherwise filter according to dropdown selection
     elif filter in countries:
         stocks = stocks_coll.find({"country": filter}).sort("ticker_symbol")
-    elif filter in stock_markets:
+    else:
         stocks = stocks_coll.find({"market_name": filter}).sort("ticker_symbol")
     # If user logged in, identify their watched stocks
     if 'user' in session:
