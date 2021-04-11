@@ -281,6 +281,8 @@ In order to set up a database in MongoDB:
 
 - [Stack Overflow](https://stackoverflow.com/questions/7643308/how-to-automatically-close-alerts-using-twitter-bootstrap) - Used for automatically closing flash messages.
 
+- [Pixabay](https://pixabay.com/photos/business-chart-graph-graphic-5475664/) - Hero Image downloaded from here.
+
 ### Acknowledgements
 - Spencer Barriball - Mentor at Code Institute
 
