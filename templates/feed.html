@@ -34,39 +34,48 @@
                                         {% endif %}
                                     </h1>                                                                  
                                 </div>                                       
-                            </div>                        
-                            <div class="table-responsive table-hover table-margin-top">
-                                <table class="table table-content">
-                                    <tbody>
-                                        {% for comment in latest_comments %}                                       
-                                            {% for stock in stocks %}
-                                                {% for commented_stock in stock.comments %}
-                                                    {% if comment._id == commented_stock %}
-                                                        <tr>
-                                                            <td>
-                                                                <div class="stock-icon">
-                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                        <img src= "{{ stock.icon_url }}" alt="icon">
-                                                                    </a>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <div class="text-wrap">
-                                                                    <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
-                                                                        <h4>{{ stock.ticker_symbol }}</h4>
-                                                                        <h4>{{ comment.comment }}</h4>
-                                                                        <h6>{{ comment.username }}&nbsp{{ comment.date_created}}</h6>
-                                                                    </a>
-                                                                </div>
-                                                            </td> 
-                                                        </tr>  
-                                                    {% endif %}   
-                                                {% endfor %}
-                                            {% endfor %}                                                                                       
-                                        {% endfor %}  
-                                    </tbody> 
-                                </table>
                             </div>
+                            {% if stocks|length > 0 %}                        
+                                <div class="table-responsive table-hover table-margin-top">
+                                    <table class="table table-content">
+                                        <tbody>
+                                            {% for comment in latest_comments %}                                       
+                                                {% for stock in stocks %}
+                                                    {% for commented_stock in stock.comments %}
+                                                        {% if comment._id == commented_stock %}
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="stock-icon">
+                                                                        <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                            <img src= "{{ stock.icon_url }}" alt="icon">
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="text-wrap">
+                                                                        <a href="{{ url_for('get_stock', stock_id=stock._id) }}">
+                                                                            <h4>{{ stock.ticker_symbol }}</h4>
+                                                                            <h4>{{ comment.comment }}</h4>
+                                                                            <h6>{{ comment.username }}&nbsp{{ comment.date_created}}</h6>
+                                                                        </a>
+                                                                    </div>
+                                                                </td> 
+                                                            </tr>  
+                                                        {% endif %}   
+                                                    {% endfor %}
+                                                {% endfor %}                                                                                       
+                                            {% endfor %}  
+                                        </tbody> 
+                                    </table>
+                                </div>
+                            {% else %}
+                                <hr/>
+                                <div class="empty-watchlist text-center">
+                                    <h2>Your watchlist is currently empty!</h2>
+                                    <h4>Browse all stocks to build up your watchlist</h4>
+                                    <a class="btn form-button" href="{{ url_for('browse', filter='all') }}">Browse</a>
+                                </div>                           
+                            {% endif %}
                         </div>
                     </div>
                 </div>
