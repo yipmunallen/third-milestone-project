@@ -91,7 +91,7 @@ Contains all the user's watched stocks
 
 This site uses [__MongoDB__](https://www.mongodb.com//). It's database contains 3 collections: users, stocks and comments. Their structures are as follows:
 
-[alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/datastructure.png "Ticker Data Structure")
+![alt text](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/datastructure.png "Ticker Data Structure")
 
 Registered users are added to the users collection. When they create a new comment, a new document is added to the comments collection, with that comment id added to the comments array of the corresponding stock.
 
@@ -191,7 +191,7 @@ In addition:
 
   - __Defensive Programming__- Tests have been conducted to ensure users cannot perform actions or access pages they shouldn't be able to:
     1. A comment cannot be deleted unless the user is logged in and the comment was written by them
-    2. 
+    2. A user cannot view another user's watchlist
 
   - __Flash Messages__-  Flash messages are used to confirm actions and convey messages to users. There are successfully shown:
     1. If a login attempt is unsuccessfull , "Incorrect username and/or password" shows
@@ -245,11 +245,7 @@ In order to clone this project:
     2. Create a cluster as well as a database.
     3. Create three collections within your database following this [data structure](#data-structure)
 1. Add an env.py file to your workspace to include your environment variables. It will need to contain the following varibles:
-    ``` os.environ["PORT"] = "5000" ```
-    ``` os.environ["SECRET_KEY"] = "YOUR_SECRET_KEY" ```
-    ``` os.environ["DEBUG"] = "True" ```
-    ``` os.environ["MONGO_URI"] = "YOUR_MONGODB_URI" ```
-    ``` os.environ["MONGO_DBNAME"]= "DATABASE_NAME" ```
+    ``` os.environ["PORT"] = "5000" os.environ["SECRET_KEY"] = "YOUR_SECRET_KEY" os.environ["DEBUG"] = "True" os.environ["MONGO_URI"] = "YOUR_MONGODB_URI" os.environ["MONGO_DBNAME"]= "DATABASE_NAME" ```
 1. The Project can be run from the local using the following command in the gitpod CLI ```python3 app.py```
 
 ## Credits
@@ -258,7 +254,11 @@ In order to clone this project:
 
 - [Code Institute](https://www.codeinstitute.net/) - Code learnt during the Full Stack Web Developer course has been implemented in this project.
 
-- [MarkHeath](https://markheath.net/post/customize-radio-button-css) - Used post to customise radio button appearance in settings page (referenced in style.css).
+- [Bootdey](https://www.bootdey.com/snippets/view/General-Search-Results) - Used for basic template of browse/watchlist pages.
+
+- [MDBootstrap](https://mdbootstrap.com/snippets/jquery/mdbootstrap/949080#css-tab-view) - Used for filter dropdown on browse page.
+
+- [Stack Overflow](https://stackoverflow.com/questions/7643308/how-to-automatically-close-alerts-using-twitter-bootstrap) - Used for automatically closing flash messages.
 
 ### Acknowledgements
 - Spencer Barriball - Mentor at Code Institute
