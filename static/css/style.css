@@ -405,6 +405,10 @@ a {
     font-size: 1.3rem;
 }
 
+.company-details-text{
+    font-size: 2rem;
+}
+
 /* Stock - comments */
 
 .comments-number{
@@ -466,7 +470,3 @@ a {
     font-size: 2.5rem; 
     margin-top: 2rem;
 }
-
-
-
-
