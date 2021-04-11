@@ -82,7 +82,7 @@ Users can log in on this page
 Users can sign up on this page
 
   - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/feedpagescreenshot.png) -
-This shows the most recent 50 comments either across all stocks, or just on the user's watchlist depending on which filter they choose
+This shows the most recent 100 comments either across all stocks, or just on the user's watchlist depending on which filter they choose
 
   - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/watchlistpagescreenshot.png) -
 Contains all the user's watched stocks
