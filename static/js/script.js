@@ -2,7 +2,7 @@ $(document).ready(function(){
     // https://stackoverflow.com/questions/7643308/how-to-automatically-close-alerts-using-twitter-bootstrap
     $(".comment-alerts").alert();
     window.setTimeout(function() { $(".comment-alerts").alert('close'); }, 3000);
-    $('.dropdown-toggle').dropdown()
+    $('.dropdown-toggle').dropdown();
 });
 
 $(document).on('click',function(){
@@ -24,5 +24,4 @@ $('#cancel-edit-comment').on('click',function(){
     $('#edit-comment-form').css('display','none');
     $('#edit-comment').css('display','block');
     $('#delete-comment').css('display','block');
-
-});
+})
