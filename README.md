@@ -48,19 +48,19 @@ As a user I want to:
 1. Be able to delete comments I have submitted
 1. Build my own watchlist so that I can have easy access to my favourite stocks
 1. Be able to remove stocks from my watchlist
-1. Be able to see comments across all stocks
+1. Be able to see comments across a range of stocks
 
 
 ### Design
 
 - #### Wireframes
 
-  - [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
-  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
-  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
-  - [Log In / Sign Up](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
-  - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
-  - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagescreenshot.png)
+  - [Home](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/indexpagewireframe.png)
+  - [Browse](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/browsepagewireframe.png)
+  - [Stock](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/stockpagewireframe.png)
+  - [Log In / Sign Up](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/loginpagewireframe.png)
+  - [Feed](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/feedpagewireframe.png)
+  - [Watchlist](https://github.com/yipmunallen/Third-Milestone-Project/blob/master/static/images/readme/watchlistpagewireframe.png)
 
 - #### Final Pages 
 
@@ -161,13 +161,15 @@ In addition:
 ### User Stories
 
 1. Easily browse available stocks
-    1. The browse page is accessible from the navbar at all times to both non logged in and logged in users
-    2. A search bar has been added 
-    3. 
+    1. The browse page is accessible from the sticky navbar at all times to both non logged in and logged in users
+    2. On initial entry to the page, all stocks in the stocks collection are successfully shown
 1. Easily search for stocks that I am interested in
+    1. A functioning search bar has been added that allows users to refine their search. If there are no search results, then "no results found" will be displayed
+    2. There is also a dropdown filter under the search bar that allows users to filter stocks shown, as well as a "Show All" button which removes the filter
 1. Be able to comment on stocks
-    1. A comment form is unavailable to non logged in users, with a prompt to sign up or log in
-    2. The comment form is avaible to logged in users. 
+    1. A comment form is available to logged in users on the stocks page
+    2. Upon submittion of the form, a new document is added to the comments collection, with it's id added to the corresponding stock's comments array
+    3. The comment form is unavailable to non-logged in users, with a prompt to sign up / login
 1. Be able to edit comments I have submitted
     1. The edit comment button is only shown if the logged in user is the one that submitted the comment
     2. Once the edit button is clicked, a form opens up allowing the user to either edit their comment, or cancel the form
@@ -175,22 +177,39 @@ In addition:
 1. Be able to delete comments I have submitted
     1. The delete comment button is only shown if the logged in user is the one that submitted the comment
     2. Once the delete button is pressed, the comment is removed from the comments collection as well as it's id removed from the stock's comments array
-    3. Confirmation is given once a comment is deleted
 1. Build my own watchlist so that I can have easy access to my favourite stocks
-    1. Watchlist is available to logged in users only
-    1. Once a stock is added to a user's watchlist either on the browse or individual stock page, the stock will appear on their watchlist and the icon will change indicating that the stock is now in their list.
+    1. Watchlist functionality is available to logged in users only, who can access their watchlist from the sticky navbar at all times
+    2. Users can see easily add stocks to their watchlist from the browse and stock pages. 
 1. Be able to remove stocks from my watchlist
-    1. 
-1. Be able to see comments across all stocks
-    1. The most recent 50 stocks can be viewed on the "Feed" page for logged in users
+    1. Users can remove stocks from their watchlist on the watchlist, browse and stock pages. 
+1. Be able to see comments across a range stocks
+    1. A feed page is available to logged in users and can be accessed from the sticky navbar at all times
+    1. The page displays the most recent 50 comments across all stocks.
+    2. There is a toggle button that allows users to only see comments on their watched stocks. 
 
-### Additional Functionality
+### Additional Testing
 
-  - __Allowing single answer__-  This has been tested to ensure that once an answer is clicked, all other answer buttons are disabled other than the Next Question Button
+  - __Defensive Programming__- Tests have been conducted to ensure users cannot perform actions or access pages they shouldn't be able to:
+    1. A comment cannot be deleted unless the user is logged in and the comment was written by them
+    2. 
 
-  - __Next Question Button__- This has been tested to ensure that it will appear whenever a selection is made, or when the timer runs out
+  - __Flash Messages__-  Flash messages are used to confirm actions and convey messages to users. There are successfully shown:
+    1. If a login attempt is unsuccessfull , "Incorrect username and/or password" shows
+    2. If a user tried to sign up with an existing username, "username already exists" shows.
+    3. If a new user signs up, they will be directed to the feed page where "Welcome to Ticker, Username. This feed shows recent comments on stocks" shows.  
+    4. If a user logs in, they will be directed to the feed page where "Welcome, Username" shows.
+    5. If a user creates a new comment, "Comment succesfully added" shows.
+    5. If a user edits a comment, "Comment succesfully edited" shows.
+    5. If a user deletes a comment, "Comment succesfully deleted" shows.
 
-  - __404 Error__- This has been tested to ensure that the 404 error page will show if the error occurs, with a link that redirects to the home page.
+  - __Form Validation__- Form validation has been tested to ensure that:
+    1. If a user attempts to sign up with a username or password that does not conform to the requirements stated on the form, "please match requested format" is shown and the form is not sent.
+    2. If a user attempts to sign up without filling in BOTH the username and password form, they will be prompted to fill out the missing field(s)
+    3. If a user attempts to submit a blank comment on a stocks page, they will be prompted to fill out the missing field
+
+  - __404 Error__- This has been tested to ensure that the custom 404 error page will show if the error occurs, with a link that redirects to the home page.
+
+  - __405 Error__- This has been tested to ensure that the custom 405 error page will show if the error occurs, with a link that redirects to the home page.
 
 ### Compatibility
 
@@ -208,10 +227,6 @@ In addition:
 
   - __Python__ - Validated using [PEP 8](https://jshint.com/) with no errors found.
   
-### Bugs
-
-  - __Unable To Get Category From API__ - There was a "Musicals and Theatres" category, but the category value was returning an error from the API so it has been removed.
-
 
 ## Deployment
 
