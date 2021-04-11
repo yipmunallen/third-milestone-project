@@ -150,13 +150,12 @@ Registered users are added to the users collection. When they create a new comme
 In order for the website to pass testing, the following have been tested both whilst in development and on the live website:
 
 1. Functionality in line with user stories
-1. Additional functionality required for website building
+1. Additional functionality required for website
 1. Compatibility with multiple devices and browsers
 
 In addition: 
 
 1. The HTML, CSS, Javascript and Python files have been validated using respective online validators.
-1. Bugs have been listed
 
 ### User Stories
 
@@ -164,18 +163,18 @@ In addition:
     1. The browse page is accessible from the sticky navbar at all times to both non logged in and logged in users
     2. On initial entry to the page, all stocks in the stocks collection are successfully shown
 1. Easily search for stocks that I am interested in
-    1. A functioning search bar has been added that allows users to refine their search. If there are no search results, then "no results found" will be displayed
-    2. There is also a dropdown filter under the search bar that allows users to filter stocks shown, as well as a "Show All" button which removes the filter
+    1. A functioning search bar has been added on the watchlist and browse pages that allows users to refine their search. If there are no search results, then "no results found" will be displayed
+    2. There is also a dropdown filter under the search bar on the browse page that allows users to filter stocks shown, as well as a "Show All" button which removes the filter
 1. Be able to comment on stocks
     1. A comment form is available to logged in users on the stocks page
     2. Upon submittion of the form, a new document is added to the comments collection, with it's id added to the corresponding stock's comments array
     3. The comment form is unavailable to non-logged in users, with a prompt to sign up / login
 1. Be able to edit comments I have submitted
-    1. The edit comment button is only shown if the logged in user is the one that submitted the comment
+    1. The edit comment button is shown if the logged in user is the one that submitted the comment
     2. Once the edit button is clicked, a form opens up allowing the user to either edit their comment, or cancel the form
     3. Once the comment is submitted, the comment in the comments collection is updated
 1. Be able to delete comments I have submitted
-    1. The delete comment button is only shown if the logged in user is the one that submitted the comment
+    1. The delete comment button is shown if the logged in user is the one that submitted the comment
     2. Once the delete button is pressed, the comment is removed from the comments collection as well as it's id removed from the stock's comments array
 1. Build my own watchlist so that I can have easy access to my favourite stocks
     1. Watchlist functionality is available to logged in users only, who can access their watchlist from the sticky navbar at all times
@@ -184,23 +183,28 @@ In addition:
     1. Users can remove stocks from their watchlist on the watchlist, browse and stock pages. 
 1. Be able to see comments across a range stocks
     1. A feed page is available to logged in users and can be accessed from the sticky navbar at all times
-    1. The page displays the most recent 50 comments across all stocks.
-    2. There is a toggle button that allows users to only see comments on their watched stocks. 
+    2. The page displays the most recent 100 comments across all stocks.
+    3. There is a toggle button that allows users to only see comments on their watched stocks. 
 
 ### Additional Testing
 
   - __Defensive Programming__- Tests have been conducted to ensure users cannot perform actions or access pages they shouldn't be able to:
-    1. A comment cannot be deleted unless the user is logged in and the comment was written by them
-    2. A user cannot view another user's watchlist
+    1. If a logged in user:
+        1. Tries to access the sign up page, they will be redirected to their feed and a message "You already have an account" will be shown. 
+        2. Tries to access the log in page, they will be redirected to their feed and a message "You are already logged in" will be shown. 
+    2. If a non logged in user:
+        1. Tries to access a feed, they will be redirected to the index page. 
+        2. Tries to add to a watchlist, they will be prompted to log in or sign up
+    3. A comment cannot be deleted unless the user is logged in and the comment was written by them. If this is attempted using the url, the stock page will reload and no comment is deleted.
 
   - __Flash Messages__-  Flash messages are used to confirm actions and convey messages to users. There are successfully shown:
     1. If a login attempt is unsuccessfull , "Incorrect username and/or password" shows
     2. If a user tried to sign up with an existing username, "username already exists" shows.
     3. If a new user signs up, they will be directed to the feed page where "Welcome to Ticker, Username. This feed shows recent comments on stocks" shows.  
     4. If a user logs in, they will be directed to the feed page where "Welcome, Username" shows.
-    5. If a user creates a new comment, "Comment succesfully added" shows.
-    5. If a user edits a comment, "Comment succesfully edited" shows.
-    5. If a user deletes a comment, "Comment succesfully deleted" shows.
+    5. If a user creates a new comment, "Comment successfully added" shows.
+    5. If a user edits a comment, "Comment successfully edited" shows.
+    5. If a user deletes a comment, "Comment successfully deleted" shows.
 
   - __Form Validation__- Form validation has been tested to ensure that:
     1. If a user attempts to sign up with a username or password that does not conform to the requirements stated on the form, "please match requested format" is shown and the form is not sent.
@@ -221,7 +225,7 @@ In addition:
 
   - __CSS__ - Validated using [Jigsaw](https://jigsaw.w3.org/css-validator/#validate_by_input) with no errors found.
 
-  - __HTML__ - Validated using [W3C](https://validator.w3.org/#validate_by_input). Disregarding errors relating to the use to Jinja, there are no errors found.
+  - __HTML__ - Validated using [W3C](https://validator.w3.org/#validate_by_input). Other than errors related to the user of the Jinja templating language, no errors found.
 
   - __Javascript__ - Validated using [JSHint Validator](https://jshint.com/) with no errors found.
 
@@ -237,22 +241,33 @@ This project is hosted by Github and deployed using heroku.
 In order to clone this project:
 
 1. Log in to Github and find the Github Repository.
-1. Click the "code" button and copy the HTTPS link
-1. Open Git terminal and type ```git clone``` followed by the link
-1. Access the folder in your terminal window and install the application's required modules using the following command: ```pip3 install -r requirements.txt```
-1. Create your database in MongoDB.
-    1. Signup or login to MongoDB
-    2. Create a cluster as well as a database.
-    3. Create three collections within your database following this [data structure](#data-structure)
+2. Click the "code" button and copy the HTTPS link
+3. Open Git terminal and type ```git clone``` followed by the link and hit "enter".
+
+### Setting up a database
+
+In order to set up a database in MongoDB:
+
+1. Signup or login to MongoDB
+2. Create a cluster as well as a database.
+3. Create three collections within your database following this [data structure](#data-structure)
+
+### Deploy to Heroku
+
 1. Add an env.py file to your workspace containing the following variables:
-    ``` os.environ["PORT"] = "5000" os.environ["SECRET_KEY"] = "YOUR_SECRET_KEY" os.environ["DEBUG"] = "True" os.environ["MONGO_URI"] = "YOUR_MONGODB_URI" os.environ["MONGO_DBNAME"]= "DATABASE_NAME" ```
-1. In order to deploy to Heroku:
+    1. ``` os.environ["PORT"] = "5000"```
+    2. ``` os.environ["IP"] = "0.0.0.0"```
+    3. ``` os.environ["SECRET_KEY"] = "YOUR_SECRET_KEY"``` 
+    4. ```os.environ["MONGO_URI"] = "YOUR_MONGODB_URI"``` 
+    5. ```os.environ["MONGO_DBNAME"]= "DATABASE_NAME" ```
+2. Create an application:
     1. Log in or sign up to [__Heroku__](https://heroku.com/)
-    2. Create a new app
-    3. Connect the app to github
-    4. Go to the app's settings and create conig vars based on variable in env.py
-    5. Once you have pushed all your files to Github, navigate to the deploy tab, "enable automatic deploys" and deploy branch to Heroku
-1. The Project can be run from the local using the following command in the gitpod CLI ```python3 app.py```
+    2. Click on the "New" button and "Create new app"
+3. Connect to Github
+    1. Click on the "Deploy" tab and "Connect to GitHub"
+    2. Enter the name of your Github repository and click "Connect"
+    3. Go to the "Settings" tab and create config vars based on variables created in env.py previously
+    4. Once all your Github files are pushed, navigate back to the "Deploy" tab, select "Enable automatic deploys" and deploy branch to Heroku
 
 ## Credits
 
