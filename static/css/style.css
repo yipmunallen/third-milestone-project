@@ -428,19 +428,19 @@ a {
   padding-bottom: 1rem;
 }
 
-#comment-time{
+.comment-time{
     margin-left: 2rem;
 }
 
-#comment-body{
+.comment-body{
     font-size: 1.3rem;
 }
 
-#edit-comment-form{
+.edit-comment-form{
     display:none;
 }
 
-#edit-comment,#delete-comment{
+.edit-comment,.delete-comment{
     float: right;
     padding-right: 2rem;
 }
