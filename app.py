@@ -33,6 +33,7 @@ def index():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    """ This sign's up a new user """
     if request.method == "POST":
         existing_user = users_coll.find_one(
             {"username": request.form.get("username").lower()})
@@ -50,7 +51,10 @@ def signup():
         users_coll.insert_one(signup)
         session["user"] = request.form.get("username").lower()
         flash("Welcome to Ticker, {}."
-              "This feed shows recent comments on stocks"
+              "This feed shows recent comments on stocks. "
+              "You can toggle between all comments"
+              " and comments on your watchlist"
+              " using the button next to feed"
               .format(request.form.get("username")))
         return redirect(url_for("feed", username=session["user"],
                                 filter='all'))
@@ -63,6 +67,7 @@ def signup():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """ This logs a user in """
     if request.method == "POST":
         # check if username exists in db
         existing_user = users_coll.find_one(
@@ -104,14 +109,17 @@ def logout():
 
 @app.route("/feed/<username>/<filter>")
 def feed(username, filter):
-    """ This gets stocks for browse page """
+    """ This gets the feed page """
     if "user" in session:
         username = users_coll.find_one(
             {"username": session["user"]})
-        latest_comments = comments_coll.find().sort("_id", -1).limit(50)
+        # Get the 100 most recent comments
+        latest_comments = comments_coll.find().sort("_id", -1).limit(100)
         if filter == 'all':
             stocks = list(stocks_coll.find())
         else:
+            # Identify the user's watched stocks in
+            # order to show watched stock's comments only
             stocks = []
             for stock in username["watched_stocks"]:
                 watched_stocks_list = stocks_coll.find_one({
@@ -378,7 +386,7 @@ def page_not_found(e):
 
 @app.errorhandler(405)
 def method_not_allowed(error):
-    """ This renders 404 error page """
+    """ This renders 405 error page """
     return render_template("405.html")
 
 
