@@ -27,9 +27,9 @@
                                 <div class="col-12">
                                     <h1 class="title">Feed
                                         {% if filter == 'all' %}
-                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='watchlist') }}">All</a>                                          
+                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='watchlist') }}">Show watchlist only</a>                                          
                                         {% else %}
-                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='all') }}">Watchlist Only</a> 
+                                            <a class="btn buttons" href="{{ url_for('feed', username=session['user'], filter='all') }}">Show all</a> 
                                         {% endif %}
                                     </h1> 
                                     <hr/>                                                                 
